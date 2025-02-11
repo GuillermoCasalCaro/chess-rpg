@@ -1,24 +1,34 @@
-import { BlurFilter } from "pixi.js";
-import { Stage, Container, Sprite, Text } from "@pixi/react";
 import { useMemo } from "react";
+import { BlurFilter, TextStyle } from "pixi.js";
+import { Stage, Container, Sprite, Text } from "@pixi/react";
 
-export const MyComponent = () => {
-    const blurFilter = useMemo(() => new BlurFilter(4), []);
-
+export const ChessBoard = () => {
+    const blurFilter = useMemo(() => new BlurFilter(2), []);
+    const bunnyUrl = "https://pixijs.io/pixi-react/img/bunny.png";
     return (
-        <Stage options={{ background: 0xffffff }}>
-            <Sprite
-                image="https://pixijs.io/pixi-react/img/bunny.png"
-                x={400}
-                y={270}
-                anchor={{ x: 0.5, y: 0.5 }}
-            />
+        <Stage width={800} height={600} options={{ background: 0x1099bb }}>
+            <Sprite image={bunnyUrl} x={300} y={150} />
+            <Sprite image={bunnyUrl} x={500} y={150} />
+            <Sprite image={bunnyUrl} x={400} y={200} />
 
-            <Container x={400} y={330}>
+            <Container x={200} y={200}>
                 <Text
                     text="Hello World"
-                    anchor={{ x: 0.5, y: 0.5 }}
+                    anchor={0.5}
+                    x={220}
+                    y={150}
                     filters={[blurFilter]}
+                    style={
+                        new TextStyle({
+                            align: "center",
+                            fill: "0xffffff",
+                            fontSize: 50,
+                            letterSpacing: 20,
+                            dropShadow: true,
+                            dropShadowColor: "#E72264",
+                            dropShadowDistance: 6,
+                        })
+                    }
                 />
             </Container>
         </Stage>
