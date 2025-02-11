@@ -1,36 +1,63 @@
-import { useMemo } from "react";
-import { BlurFilter, TextStyle } from "pixi.js";
-import { Stage, Container, Sprite, Text } from "@pixi/react";
+import { Stage, Container, Graphics, Sprite } from "@pixi/react";
+import { } from "pixi.js"
+import { useState } from "react";
+// import {} from "../assets/white_pawn.png"
+
+const BOARD_SIZE = 8;
+const TILE_SIZE = 100;
 
 export const ChessBoard = () => {
-    const blurFilter = useMemo(() => new BlurFilter(2), []);
-    const bunnyUrl = "https://pixijs.io/pixi-react/img/bunny.png";
-    return (
-        <Stage width={800} height={600} options={{ background: 0x1099bb }}>
-            <Sprite image={bunnyUrl} x={300} y={150} />
-            <Sprite image={bunnyUrl} x={500} y={150} />
-            <Sprite image={bunnyUrl} x={400} y={200} />
+    const [pieces, setPieces] = useState<{ x: number; y: number }[]>([
+        { x: 0, y: 6 },
+        { x: 1, y: 6 },
+        { x: 2, y: 6 },
+    ]);
 
-            <Container x={200} y={200}>
-                <Text
-                    text="Hola MAPAXIN"
-                    anchor={0.5}
-                    x={220}
-                    y={150}
-                    filters={[blurFilter]}
-                    style={
-                        new TextStyle({
-                            align: "center",
-                            fill: "0xffffff",
-                            fontSize: 50,
-                            letterSpacing: 20,
-                            dropShadow: true,
-                            dropShadowColor: "#E72264",
-                            dropShadowDistance: 6,
-                        })
-                    }
-                />
+
+    return (
+        <Stage
+            width={BOARD_SIZE * TILE_SIZE}
+            height={BOARD_SIZE * TILE_SIZE}
+            options={{ backgroundColor: 0x222222 }}>
+            <Container>
+
+                {Array.from({ length: BOARD_SIZE * BOARD_SIZE }).map((_, index) => {
+                    const row = Math.floor(index / BOARD_SIZE);
+                    const col = index % BOARD_SIZE;
+                    return (
+                        <Graphics
+                            key={index}
+                            draw={(g) => {
+                                g.beginFill((row + col) % 2 === 0 ? "rgb(96,56,20)" : "rgb(249,223,189)");
+                                g.drawRect(col * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                                g.endFill();
+                            }}
+                        />
+                    );
+                })}
+
             </Container>
+
+            {
+                pieces.map((piece, i) => (
+                    <Sprite
+                        key={i}
+                        image={"/src/assets/white_pawn.png"}
+                        x={piece.x * TILE_SIZE + TILE_SIZE / 2}
+                        y={piece.y * TILE_SIZE + TILE_SIZE / 2}
+                        anchor={0.5}
+                        interactive
+
+                        pointerdown={(event) => {
+                            const { x, y } = event.data.global;
+                            setPieces((prev) =>
+                                prev.map((p, index) =>
+                                    index === i ? { x: Math.floor(x / TILE_SIZE), y: Math.floor(y / TILE_SIZE) } : p
+                                )
+                            );
+                        }}
+                    />
+                ))}
         </Stage>
     );
 };
