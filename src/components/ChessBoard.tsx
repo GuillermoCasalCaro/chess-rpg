@@ -13,7 +13,7 @@ export const ChessBoard = () => {
 
             <Container x={200} y={200}>
                 <Text
-                    text="Hello World"
+                    text="Hola MAPAXIN"
                     anchor={0.5}
                     x={220}
                     y={150}
