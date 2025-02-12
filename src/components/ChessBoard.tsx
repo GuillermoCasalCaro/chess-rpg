@@ -1,5 +1,4 @@
 import { Stage, Container, Graphics } from "@pixi/react";
-import { } from "pixi.js"
 import { useEffect } from "react";
 import { Piece } from "./Piece";
 import { usePiecePositions, Piece as PieceType } from "../state/piecePositions";

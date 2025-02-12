@@ -2,7 +2,8 @@ import { Sprite } from "@pixi/react";
 import { TILE_SIZE } from "./ChessBoard";
 import { Tile, useDraggingPiece } from "../state/draggingPiece";
 import { usePiecePositions } from "../state/piecePositions";
-import whitePawn from "../../public/white_pawn.png"
+import whitePawn from "/white_pawn.png"
+import '@pixi/events';
 
 interface PieceProps {
     id: number,
@@ -24,8 +25,9 @@ export const Piece = (props: PieceProps) => {
         x={position.x}
         y={position.y}
         anchor={0.5}
-        interactive
+        eventMode="dynamic"
         onclick={() => {
+            console.log("e")
             if (draggingPieceId?.id === props.id) {
                 clearDraggingPiece();
             } else {
