@@ -33,7 +33,7 @@ export const ChessBoard = () => {
                         <Graphics
                             key={index}
                             draw={(g) => {
-                                g.beginFill((row + col) % 2 === 0 ? "rgb(96,56,20)" : "rgb(249,223,189)");
+                                g.beginFill((row + col) % 2 === 0 ? "rgb(249,223,189)" : "rgb(96,56,20)");
                                 g.drawRect(col * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
                                 g.endFill();
                             }}
