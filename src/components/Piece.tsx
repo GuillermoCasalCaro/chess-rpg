@@ -2,6 +2,7 @@ import { Sprite } from "@pixi/react";
 import { TILE_SIZE } from "./ChessBoard";
 import { Tile, useDraggingPiece } from "../state/draggingPiece";
 import { usePiecePositions } from "../state/piecePositions";
+import whitePawn from "../../public/white_pawn.png"
 
 interface PieceProps {
     id: number,
@@ -19,7 +20,7 @@ export const Piece = (props: PieceProps) => {
     const position = calculateTile(props.position);
 
     return <Sprite
-        image={"/src/assets/white_pawn.png"}
+        image={whitePawn}
         x={position.x}
         y={position.y}
         anchor={0.5}
