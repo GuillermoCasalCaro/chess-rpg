@@ -1,23 +1,16 @@
 import { Stage, Container, Graphics, Sprite } from "@pixi/react";
 import { } from "pixi.js"
-import { useState } from "react";
-// import {} from "../assets/white_pawn.png"
+import { useRef, useState } from "react";
+import { Piece } from "./Piece";
 
-const BOARD_SIZE = 8;
-const TILE_SIZE = 100;
+export const BOARD_SIZE = 8;
+export const TILE_SIZE = 100;
+
+
 
 export const ChessBoard = () => {
-    const [pieces, setPieces] = useState<{ x: number; y: number }[]>([
-        { x: 0, y: 6 },
-        { x: 1, y: 6 },
-        { x: 2, y: 6 },
-        { x: 3, y: 6 },
-        { x: 4, y: 6 },
-        { x: 5, y: 6 },
-        { x: 6, y: 6 },
-        { x: 7, y: 6 },
-    ]);
-
+    const draggingRef = useRef<number>(0);
+    console.log(++draggingRef.current)
 
     return (
         <Stage
@@ -43,26 +36,14 @@ export const ChessBoard = () => {
 
             </Container>
 
-            {
-                pieces.map((piece, i) => (
-                    <Sprite
-                        key={i}
-                        image={"/src/assets/white_pawn.png"}
-                        x={piece.x * TILE_SIZE + TILE_SIZE / 2}
-                        y={piece.y * TILE_SIZE + TILE_SIZE / 2}
-                        anchor={0.5}
-                        interactive
-
-                        pointerdown={(event) => {
-                            const { x, y } = event.data.global;
-                            setPieces((prev) =>
-                                prev.map((p, index) =>
-                                    index === i ? { x: Math.floor(x / TILE_SIZE), y: Math.floor(y / TILE_SIZE) } : p
-                                )
-                            );
-                        }}
-                    />
-                ))}
+            <Piece type="pawn" initialPosition={{ x: 0, y: 6 }} />
+            <Piece type="pawn" initialPosition={{ x: 1, y: 6 }} />
+            <Piece type="pawn" initialPosition={{ x: 2, y: 6 }} />
+            <Piece type="pawn" initialPosition={{ x: 3, y: 6 }} />
+            <Piece type="pawn" initialPosition={{ x: 4, y: 6 }} />
+            <Piece type="pawn" initialPosition={{ x: 5, y: 6 }} />
+            <Piece type="pawn" initialPosition={{ x: 6, y: 6 }} />
+            <Piece type="pawn" initialPosition={{ x: 7, y: 6 }} />
         </Stage>
     );
 };
