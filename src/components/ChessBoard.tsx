@@ -1,7 +1,9 @@
-import { Stage, Container, Graphics, Sprite } from "@pixi/react";
+import { Stage, Container, Graphics } from "@pixi/react";
 import { } from "pixi.js"
-import { useRef, useState } from "react";
+import { useEffect } from "react";
 import { Piece } from "./Piece";
+import { usePiecePositions, Piece as PieceType } from "../state/piecePositions";
+import { useDraggingPiece } from "../state/draggingPiece";
 
 export const BOARD_SIZE = 8;
 export const TILE_SIZE = 100;
@@ -9,8 +11,16 @@ export const TILE_SIZE = 100;
 
 
 export const ChessBoard = () => {
-    const draggingRef = useRef<number>(0);
-    console.log(++draggingRef.current)
+    const { piecePositions, initializePositions } = usePiecePositions();
+    const { draggingPieceId } = useDraggingPiece()
+
+    useEffect(() => {
+        const initialPositions = Array.from({ length: 8 }).reduce((acc: Record<number, PieceType>, _, i) => {
+            acc[i] = { id: i, type: "pawn", tile: { x: i, y: 6 }, numberOfMoves: 0 };
+            return acc;
+        }, {});
+        initializePositions(initialPositions)
+    }, [initializePositions]);
 
     return (
         <Stage
@@ -22,11 +32,16 @@ export const ChessBoard = () => {
                 {Array.from({ length: BOARD_SIZE * BOARD_SIZE }).map((_, index) => {
                     const row = Math.floor(index / BOARD_SIZE);
                     const col = index % BOARD_SIZE;
+                    const isDestination = draggingPieceId?.allowedTiles.filter(t => t.x === col && t.y === row).length;
+                    let color = (row + col) % 2 === 0 ? "rgb(249,223,189)" : "rgb(96,56,20)";
+                    if (isDestination) {
+                        color = "rgb(255,255,0)";
+                    }
                     return (
                         <Graphics
                             key={index}
                             draw={(g) => {
-                                g.beginFill((row + col) % 2 === 0 ? "rgb(249,223,189)" : "rgb(96,56,20)");
+                                g.beginFill(color);
                                 g.drawRect(col * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
                                 g.endFill();
                             }}
@@ -36,14 +51,16 @@ export const ChessBoard = () => {
 
             </Container>
 
-            <Piece type="pawn" initialPosition={{ x: 0, y: 6 }} />
-            <Piece type="pawn" initialPosition={{ x: 1, y: 6 }} />
-            <Piece type="pawn" initialPosition={{ x: 2, y: 6 }} />
-            <Piece type="pawn" initialPosition={{ x: 3, y: 6 }} />
-            <Piece type="pawn" initialPosition={{ x: 4, y: 6 }} />
-            <Piece type="pawn" initialPosition={{ x: 5, y: 6 }} />
-            <Piece type="pawn" initialPosition={{ x: 6, y: 6 }} />
-            <Piece type="pawn" initialPosition={{ x: 7, y: 6 }} />
+            {Object.values(piecePositions).map((piece) => {
+                return (
+                    <Piece
+                        key={piece.id}
+                        id={piece.id}
+                        type={"pawn"}
+                        position={piece.tile}
+                    />
+                )
+            })}
         </Stage>
     );
 };
