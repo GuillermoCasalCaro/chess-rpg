@@ -1,8 +1,8 @@
-import { Sprite } from "@pixi/react";
-import whitePawn from "/w_pawn.png";
-import { Tile, useDraggingPiece } from "../../state/draggingPiece";
-import { usePiecePositions } from "../../state/piecePositions";
-import { pruneImpossibleTiles, tileToPixel } from "./util";
+import { Sprite } from '@pixi/react';
+import whitePawn from '/w_pawn.png';
+import { Tile, useDraggingPiece } from '../../state/draggingPiece';
+import { usePiecePositions } from '../../state/piecePositions';
+import { pruneImpossibleTiles, tileToPixel } from './util';
 
 interface PawnProps {
     id: string;
@@ -40,7 +40,7 @@ export const Pawn = ({ position, id, height, width }: PawnProps) => {
                     }
                     allowedTiles = pruneImpossibleTiles(
                         allowedTiles,
-                        piecePositions
+                        piecePositions,
                     );
                     setDraggingPieceId(id, allowedTiles);
                 }

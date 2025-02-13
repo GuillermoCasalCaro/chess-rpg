@@ -1,6 +1,6 @@
-import { Tile } from "../../state/draggingPiece";
-import { PiecePositionsStore } from "../../state/piecePositions";
-import { BOARD_SIZE, TILE_SIZE } from "../ChessBoard";
+import { Tile } from '../../state/draggingPiece';
+import { PiecePositionsStore } from '../../state/piecePositions';
+import { BOARD_SIZE, TILE_SIZE } from '../ChessBoard';
 
 export const tileToPixel = (pos: Tile) => {
     return {
@@ -11,7 +11,7 @@ export const tileToPixel = (pos: Tile) => {
 
 export const pruneImpossibleTiles = (
     allowedTiles: Tile[],
-    piecePositions: PiecePositionsStore["piecePositions"]
+    piecePositions: PiecePositionsStore['piecePositions'],
 ) => {
     let newAllowedTiles = allowedTiles.filter(({ x, y }) => {
         return x >= 0 && x < BOARD_SIZE && y >= 0 && y < BOARD_SIZE;

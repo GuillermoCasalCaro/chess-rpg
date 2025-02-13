@@ -1,8 +1,8 @@
-import { Tile } from "../state/draggingPiece";
-import "@pixi/events";
-import { Pawn } from "./Pieces/Pawn";
-import { Rook } from "./Pieces/Rook";
-import { PieceType } from "./Pieces/types";
+import { Tile } from '../state/draggingPiece';
+import '@pixi/events';
+import { Pawn } from './Pieces/Pawn';
+import { Rook } from './Pieces/Rook';
+import { PieceType } from './Pieces/types';
 
 interface PieceProps {
     id: string;
@@ -13,7 +13,7 @@ interface PieceProps {
 const PIECE_SIZE = 100;
 
 export const Piece = (props: PieceProps) => {
-    if (props.type === "pawn") {
+    if (props.type === 'pawn') {
         return (
             <Pawn
                 id={props.id}
@@ -23,7 +23,7 @@ export const Piece = (props: PieceProps) => {
             />
         );
     }
-    if (props.type === "rook") {
+    if (props.type === 'rook') {
         return (
             <Rook
                 id={props.id}

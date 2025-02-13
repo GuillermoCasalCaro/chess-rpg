@@ -1,9 +1,9 @@
-import { Stage, Container, Graphics } from "@pixi/react";
-import { useEffect } from "react";
-import { Piece } from "./Piece";
-import { usePiecePositions } from "../state/piecePositions";
-import { useDraggingPiece } from "../state/draggingPiece";
-import { initialPositions } from "./initialPositision";
+import { Stage, Container, Graphics } from '@pixi/react';
+import { useEffect } from 'react';
+import { Piece } from './Piece';
+import { usePiecePositions } from '../state/piecePositions';
+import { useDraggingPiece } from '../state/draggingPiece';
+import { initialPositions } from './initialPositision';
 
 export const BOARD_SIZE = 8;
 export const TILE_SIZE = 100;
@@ -20,8 +20,8 @@ export const ChessBoard = () => {
     const isDestinationTile = (col: number, row: number) => {
         return Boolean(
             draggingPieceId?.allowedTiles.filter(
-                (t) => t.x === col && t.y === row
-            ).length
+                (t) => t.x === col && t.y === row,
+            ).length,
         );
     };
 
@@ -31,18 +31,18 @@ export const ChessBoard = () => {
             piecePositions[draggingPieceId.id].tile.x === col &&
             piecePositions[draggingPieceId.id].tile.y === row;
         if (isDraggingPieceTile) {
-            return "rgb(62, 219, 56)";
+            return 'rgb(62, 219, 56)';
         }
 
         if (isDestinationTile(col, row)) {
-            return "rgb(255,255,0)";
+            return 'rgb(255,255,0)';
         }
 
         const isEven = (col + row) % 2 === 0;
         if (isEven) {
-            return "rgb(249,223,189)";
+            return 'rgb(249,223,189)';
         } else {
-            return "rgb(96,56,20)";
+            return 'rgb(96,56,20)';
         }
     };
 
@@ -50,7 +50,8 @@ export const ChessBoard = () => {
         <Stage
             width={BOARD_SIZE * TILE_SIZE}
             height={BOARD_SIZE * TILE_SIZE}
-            options={{ backgroundColor: 0x222222 }}>
+            options={{ backgroundColor: 0x222222 }}
+        >
             <Container>
                 {Array.from({ length: BOARD_SIZE * BOARD_SIZE }).map(
                     (_, index) => {
@@ -66,7 +67,7 @@ export const ChessBoard = () => {
                                         col * TILE_SIZE,
                                         row * TILE_SIZE,
                                         TILE_SIZE,
-                                        TILE_SIZE
+                                        TILE_SIZE,
                                     );
                                     g.endFill();
                                 }}
@@ -81,13 +82,13 @@ export const ChessBoard = () => {
                                     setPiecePosition(
                                         draggingPieceId.id,
                                         col,
-                                        row
+                                        row,
                                     );
                                     clearDraggingPiece();
                                 }}
                             />
                         );
-                    }
+                    },
                 )}
             </Container>
 

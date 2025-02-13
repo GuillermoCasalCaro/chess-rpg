@@ -1,1 +1,1 @@
-export type PieceType = "pawn" | "rook";
+export type PieceType = 'pawn' | 'rook';

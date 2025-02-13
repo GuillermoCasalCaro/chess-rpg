@@ -1,6 +1,6 @@
-import { create } from "zustand";
-import { Tile } from "./draggingPiece";
-import { PieceType } from "../components/Pieces/types";
+import { create } from 'zustand';
+import { Tile } from './draggingPiece';
+import { PieceType } from '../components/Pieces/types';
 
 export type Piece = {
     id: string;

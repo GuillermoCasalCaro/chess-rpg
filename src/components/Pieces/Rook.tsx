@@ -1,9 +1,9 @@
-import { Sprite } from "@pixi/react";
-import whitePawn from "/w_rook.png";
-import { Tile, useDraggingPiece } from "../../state/draggingPiece";
-import { pruneImpossibleTiles, tileToPixel } from "./util";
-import { BOARD_SIZE } from "../ChessBoard";
-import { usePiecePositions } from "../../state/piecePositions";
+import { Sprite } from '@pixi/react';
+import whitePawn from '/w_rook.png';
+import { Tile, useDraggingPiece } from '../../state/draggingPiece';
+import { pruneImpossibleTiles, tileToPixel } from './util';
+import { BOARD_SIZE } from '../ChessBoard';
+import { usePiecePositions } from '../../state/piecePositions';
 
 interface RookProps {
     id: string;
@@ -46,7 +46,7 @@ export const Rook = ({ id, position, height, width }: RookProps) => {
                     }
                     allowedTiles = pruneImpossibleTiles(
                         allowedTiles,
-                        piecePositions
+                        piecePositions,
                     );
                     setDraggingPieceId(id, allowedTiles);
                 }
