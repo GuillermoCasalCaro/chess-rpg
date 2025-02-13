@@ -10,12 +10,28 @@ interface PieceProps {
     position: Tile;
 }
 
+const PIECE_SIZE = 100;
+
 export const Piece = (props: PieceProps) => {
     if (props.type === "pawn") {
-        return <Pawn id={props.id} position={props.position} />;
+        return (
+            <Pawn
+                id={props.id}
+                position={props.position}
+                height={PIECE_SIZE}
+                width={PIECE_SIZE}
+            />
+        );
     }
     if (props.type === "rook") {
-        return <Rook id={props.id} position={props.position} />;
+        return (
+            <Rook
+                id={props.id}
+                position={props.position}
+                height={PIECE_SIZE}
+                width={PIECE_SIZE}
+            />
+        );
     }
     return <></>;
 };
