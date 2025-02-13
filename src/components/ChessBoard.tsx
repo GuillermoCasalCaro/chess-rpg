@@ -1,8 +1,9 @@
 import { Stage, Container, Graphics } from "@pixi/react";
 import { useEffect } from "react";
 import { Piece } from "./Piece";
-import { usePiecePositions, Piece as PieceType } from "../state/piecePositions";
+import { usePiecePositions } from "../state/piecePositions";
 import { useDraggingPiece } from "../state/draggingPiece";
+import { initialPositions } from "./initialPositision";
 
 export const BOARD_SIZE = 8;
 export const TILE_SIZE = 100;
@@ -13,18 +14,6 @@ export const ChessBoard = () => {
     const { draggingPieceId, clearDraggingPiece } = useDraggingPiece();
 
     useEffect(() => {
-        const initialPositions = Array.from({ length: 8 }).reduce(
-            (acc: Record<number, PieceType>, _, i) => {
-                acc[i] = {
-                    id: i,
-                    type: "pawn",
-                    tile: { x: i, y: 6 },
-                    numberOfMoves: 0,
-                };
-                return acc;
-            },
-            {}
-        );
         initializePositions(initialPositions);
     }, [initializePositions]);
 
@@ -107,7 +96,7 @@ export const ChessBoard = () => {
                     <Piece
                         key={piece.id}
                         id={piece.id}
-                        type={"pawn"}
+                        type={piece.type}
                         position={piece.tile}
                     />
                 );
