@@ -28,6 +28,35 @@ export const ChessBoard = () => {
         initializePositions(initialPositions);
     }, [initializePositions]);
 
+    const isDestinationTile = (col: number, row: number) => {
+        return Boolean(
+            draggingPieceId?.allowedTiles.filter(
+                (t) => t.x === col && t.y === row
+            ).length
+        );
+    };
+
+    const getTileColor = (col: number, row: number) => {
+        const isDraggingPieceTile =
+            !!draggingPieceId &&
+            piecePositions[draggingPieceId.id].tile.x === col &&
+            piecePositions[draggingPieceId.id].tile.y === row;
+        if (isDraggingPieceTile) {
+            return "rgb(62, 219, 56)";
+        }
+
+        if (isDestinationTile(col, row)) {
+            return "rgb(255,255,0)";
+        }
+
+        const isEven = (col + row) % 2 === 0;
+        if (isEven) {
+            return "rgb(249,223,189)";
+        } else {
+            return "rgb(96,56,20)";
+        }
+    };
+
     return (
         <Stage
             width={BOARD_SIZE * TILE_SIZE}
@@ -38,22 +67,12 @@ export const ChessBoard = () => {
                     (_, index) => {
                         const row = Math.floor(index / BOARD_SIZE);
                         const col = index % BOARD_SIZE;
-                        const isDestination =
-                            draggingPieceId?.allowedTiles.filter(
-                                (t) => t.x === col && t.y === row
-                            ).length;
-                        let color =
-                            (row + col) % 2 === 0
-                                ? "rgb(249,223,189)"
-                                : "rgb(96,56,20)";
-                        if (isDestination) {
-                            color = "rgb(255,255,0)";
-                        }
+
                         return (
                             <Graphics
                                 key={`tile${col}${row}`}
                                 draw={(g) => {
-                                    g.beginFill(color);
+                                    g.beginFill(getTileColor(col, row));
                                     g.drawRect(
                                         col * TILE_SIZE,
                                         row * TILE_SIZE,
@@ -64,8 +83,10 @@ export const ChessBoard = () => {
                                 }}
                                 eventMode="static"
                                 onclick={() => {
-                                    console.log("cl");
-                                    if (!draggingPieceId || !isDestination) {
+                                    if (
+                                        !draggingPieceId ||
+                                        !isDestinationTile(col, row)
+                                    ) {
                                         return;
                                     }
                                     setPiecePosition(
