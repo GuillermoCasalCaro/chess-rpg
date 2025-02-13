@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
-import { Piece } from '../state/piecePositions';
-import { PieceType } from './Pieces/types';
+import { Piece } from '../state/piecePositionsStore';
+import { PieceType } from './chess-board/Pieces/types';
 
 export const initialPositions: Record<string, Piece> = [
     {

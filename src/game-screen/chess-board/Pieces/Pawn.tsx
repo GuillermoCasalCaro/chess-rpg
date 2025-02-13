@@ -1,7 +1,7 @@
 import { Sprite } from '@pixi/react';
 import whitePawn from '/w_pawn.png';
-import { Tile, useDraggingPiece } from '../../state/draggingPiece';
-import { usePiecePositions } from '../../state/piecePositions';
+import { Tile, useDraggingPieceStore } from '../../../state/draggingPieceStore';
+import { usePiecePositionsStore } from '../../../state/piecePositionsStore';
 import { pruneImpossibleTiles, tileToPixel } from './util';
 
 interface PawnProps {
@@ -12,9 +12,12 @@ interface PawnProps {
 }
 
 export const Pawn = ({ position, id, height, width }: PawnProps) => {
-    const { draggingPieceId, setDraggingPieceId, clearDraggingPiece } =
-        useDraggingPiece();
-    const { piecePositions } = usePiecePositions();
+    const {
+        draggingPiece: draggingPieceId,
+        setDraggingPiece: setDraggingPieceId,
+        clearDraggingPiece,
+    } = useDraggingPieceStore();
+    const { piecePositions } = usePiecePositionsStore();
     const pieceInfo = piecePositions[id];
     const pixelPosition = tileToPixel(position);
 

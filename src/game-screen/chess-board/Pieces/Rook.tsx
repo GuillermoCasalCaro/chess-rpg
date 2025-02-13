@@ -1,9 +1,9 @@
 import { Sprite } from '@pixi/react';
 import whitePawn from '/w_rook.png';
-import { Tile, useDraggingPiece } from '../../state/draggingPiece';
+import { Tile, useDraggingPieceStore } from '../../../state/draggingPieceStore';
 import { pruneImpossibleTiles, tileToPixel } from './util';
 import { BOARD_SIZE } from '../ChessBoard';
-import { usePiecePositions } from '../../state/piecePositions';
+import { usePiecePositionsStore } from '../../../state/piecePositionsStore';
 
 interface RookProps {
     id: string;
@@ -13,9 +13,12 @@ interface RookProps {
 }
 
 export const Rook = ({ id, position, height, width }: RookProps) => {
-    const { draggingPieceId, setDraggingPieceId, clearDraggingPiece } =
-        useDraggingPiece();
-    const { piecePositions } = usePiecePositions();
+    const {
+        draggingPiece: draggingPieceId,
+        setDraggingPiece: setDraggingPieceId,
+        clearDraggingPiece,
+    } = useDraggingPieceStore();
+    const { piecePositions } = usePiecePositionsStore();
     const pixelPosition = tileToPixel(position);
 
     return (

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { Tile } from './draggingPiece';
-import { PieceType } from '../components/Pieces/types';
+import { Tile } from './draggingPieceStore';
+import { PieceType } from '../game-screen/chess-board/Pieces/types';
 
 export type Piece = {
     id: string;
@@ -15,7 +15,7 @@ export type PiecePositionsStore = {
     setPiecePosition: (id: string, x: number, y: number) => void;
 };
 
-export const usePiecePositions = create<PiecePositionsStore>((set) => ({
+export const usePiecePositionsStore = create<PiecePositionsStore>((set) => ({
     piecePositions: {},
     initializePositions: (positions) =>
         set(() => ({

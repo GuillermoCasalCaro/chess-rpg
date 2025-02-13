@@ -1,4 +1,4 @@
-import { Tile } from '../state/draggingPiece';
+import { Tile } from '../../state/draggingPieceStore';
 import '@pixi/events';
 import { Pawn } from './Pieces/Pawn';
 import { Rook } from './Pieces/Rook';

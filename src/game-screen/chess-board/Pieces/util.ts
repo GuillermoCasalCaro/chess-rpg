@@ -1,5 +1,5 @@
-import { Tile } from '../../state/draggingPiece';
-import { PiecePositionsStore } from '../../state/piecePositions';
+import { Tile } from '../../../state/draggingPieceStore';
+import { PiecePositionsStore } from '../../../state/piecePositionsStore';
 import { BOARD_SIZE, TILE_SIZE } from '../ChessBoard';
 
 export const tileToPixel = (pos: Tile) => {
@@ -16,7 +16,7 @@ export const pruneImpossibleTiles = (
     let newAllowedTiles = allowedTiles.filter(({ x, y }) => {
         return x >= 0 && x < BOARD_SIZE && y >= 0 && y < BOARD_SIZE;
     });
-    //filter already occupied tiles
+    
     const pieces = Object.values(piecePositions);
     console.log(pieces.map((piece) => piece.tile));
     console.log(newAllowedTiles);
