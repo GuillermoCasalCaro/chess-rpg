@@ -15,13 +15,14 @@ export const ChessBoard = () => {
         usePiecePositionsStore();
     const { draggingPiece: draggingPieceId, clearDraggingPiece } =
         useDraggingPieceStore();
-    const { gameStats, setGameStats } = useGameStatsStore();
+    const { gameStats, decreaseLeftMovesPerRound } = useGameStatsStore();
 
     useEffect(() => {
         initializePositions(initialPositions);
     }, [initializePositions]);
 
     const isDestinationTile = (col: number, row: number) => {
+        if (gameStats.leftMovesPerRound === 0) return false;
         return Boolean(
             draggingPieceId?.allowedTiles.filter(
                 (t) => t.x === col && t.y === row,
@@ -54,10 +55,7 @@ export const ChessBoard = () => {
         const piece = piecePositions[id];
         piece.tile = tile;
         setPiecePosition(id, tile.x, tile.y);
-        setGameStats({
-            numberOfRounds: gameStats.numberOfRounds + 1,
-            money: gameStats.money + 3,
-        });
+        decreaseLeftMovesPerRound();
         clearDraggingPiece();
     };
 
