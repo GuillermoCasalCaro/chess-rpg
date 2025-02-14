@@ -22,7 +22,14 @@ export const GameStatsSection = () => {
         >
             <Text size="lg">Round: #{gameStats.numberOfRounds}</Text>
             <Text size="lg">Money: {gameStats.money} $</Text>
-            <Text size="lg">Pieces: {Object.keys(piecePositions).length}</Text>
+            <Text size="lg">
+                Pieces:{' '}
+                {
+                    Object.values(piecePositions).filter(
+                        (p) => p.color === 'white',
+                    ).length
+                }
+            </Text>
             <Text size="lg">Moves: {gameStats.leftMovesPerRound}</Text>
             <Button
                 size="xs"

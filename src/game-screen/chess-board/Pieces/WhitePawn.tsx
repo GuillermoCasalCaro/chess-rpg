@@ -12,7 +12,7 @@ interface PawnProps {
     width: number;
 }
 
-export const Pawn = ({ position, id, height, width }: PawnProps) => {
+export const WhitePawn = ({ position, id, height, width }: PawnProps) => {
     const {
         draggingPiece: draggingPieceId,
         setDraggingPiece: setDraggingPieceId,

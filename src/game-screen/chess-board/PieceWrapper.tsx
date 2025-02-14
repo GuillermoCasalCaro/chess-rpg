@@ -1,5 +1,5 @@
 import '@pixi/events';
-import { Pawn } from './Pieces/WhitePawn';
+import { WhitePawn } from './Pieces/WhitePawn';
 import { WhiteRook } from './Pieces/WhiteRook';
 import { Piece } from './Pieces/types';
 import { BlackPawn } from './Pieces/BlackPawn';
@@ -14,7 +14,7 @@ export const PieceWrapper = ({ piece }: PieceProps) => {
     if (piece.color === 'white') {
         if (piece.type === 'pawn') {
             return (
-                <Pawn
+                <WhitePawn
                     id={piece.id}
                     position={piece.tile}
                     height={PIECE_SIZE}
