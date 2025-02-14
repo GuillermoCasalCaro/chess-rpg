@@ -1,10 +1,11 @@
 import { Text, Group, Button } from '@mantine/core';
 import { useGameStatsStore } from '../../state/gameStatsStore';
 import { usePiecePositionsStore } from '../../state/piecePositionsStore';
+import { calculateBlackMoves } from './Pieces/black-moves';
 
 export const GameStatsSection = () => {
     const { gameStats, setGameStats } = useGameStatsStore();
-    const { piecePositions } = usePiecePositionsStore();
+    const { piecePositions, setPiecePositions } = usePiecePositionsStore();
 
     return (
         <Group
@@ -27,14 +28,13 @@ export const GameStatsSection = () => {
                 size="xs"
                 variant="gradient"
                 gradient={{ from: 'blue', to: 'cyan', deg: 90 }}
-                onClick={
-                    () =>
-                        setGameStats({
-                            leftMovesPerRound: 3,
-                            numberOfRounds: gameStats.numberOfRounds + 1,
-                        })
-                    //TODO set enemy piece positions.
-                }
+                onClick={() => {
+                    setGameStats({
+                        leftMovesPerRound: 3,
+                        numberOfRounds: gameStats.numberOfRounds + 1,
+                    });
+                    setPiecePositions(calculateBlackMoves(piecePositions));
+                }}
             >
                 {'NEXT'}
             </Button>

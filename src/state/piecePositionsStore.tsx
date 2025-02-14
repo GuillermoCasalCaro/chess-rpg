@@ -1,11 +1,12 @@
 import { create } from 'zustand';
 import { getInitialPositions } from '../game-screen/initialPositions';
-import { Piece } from '../game-screen/chess-board/Pieces/types';
+import { PiecePositions } from '../game-screen/chess-board/Pieces/types';
 
 export type PiecePositionsStore = {
-    piecePositions: Record<string, Piece>;
+    piecePositions: PiecePositions;
     initializePositions: () => void;
     setPiecePosition: (id: string, x: number, y: number) => void;
+    setPiecePositions: (piecePositions: PiecePositions) => void;
     resetPiecePositions: () => void;
 };
 
@@ -29,6 +30,10 @@ export const usePiecePositionsStore = create<PiecePositionsStore>((set) => ({
                 },
             };
         }),
+    setPiecePositions: (piecePositions) =>
+        set(() => ({
+            piecePositions,
+        })),
     resetPiecePositions: () =>
         set(() => {
             return {

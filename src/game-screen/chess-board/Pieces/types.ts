@@ -5,6 +5,8 @@ export type Piece = {
     id: string;
     type: PieceMark;
     tile: Tile;
+    nextMove: () => Tile;
     numberOfMoves: number;
     color: PieceColor;
 };
+export type PiecePositions = Record<string, Piece>;

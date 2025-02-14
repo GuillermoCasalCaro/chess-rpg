@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { Piece } from './chess-board/Pieces/types';
 
-export const getInitialPositions: () => Record<string, Piece> = () =>
+export const getInitialPositions: () => PiecePositions = () =>
     (
         [
             {
@@ -20,7 +20,7 @@ export const getInitialPositions: () => Record<string, Piece> = () =>
                 color: 'black',
             },
         ] as Piece[]
-    ).reduce((acc: Record<string, Piece>, piece) => {
+    ).reduce((acc: PiecePositions, piece) => {
         const id = uuidv4();
         acc[id] = {
             ...piece,
