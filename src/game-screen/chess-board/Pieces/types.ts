@@ -7,5 +7,6 @@ export type Piece = {
     tile: Tile;
     numberOfMoves: number;
     color: PieceColor;
+    kills: number;
 };
 export type PiecePositions = Record<string, Piece>;

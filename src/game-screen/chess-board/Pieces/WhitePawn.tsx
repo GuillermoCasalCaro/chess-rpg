@@ -1,9 +1,10 @@
-import { Sprite } from '@pixi/react';
+import { Sprite, Text } from '@pixi/react';
 import whitePawn from '/w_pawn.png';
 import { useDraggingPieceStore } from '../../../state/draggingPieceStore';
 import { usePiecePositionsStore } from '../../../state/piecePositionsStore';
 import { isTileOccupied, pruneOutboundTiles, tileToPixel } from './util';
 import { Tile } from './types';
+import { TextStyle } from 'pixi.js';
 
 interface PawnProps {
     id: string;
@@ -66,30 +67,45 @@ export const WhitePawn = ({ position, id, height, width }: PawnProps) => {
     };
 
     return (
-        <Sprite
-            image={whitePawn}
-            x={pixelPosition.x}
-            y={pixelPosition.y}
-            height={height}
-            width={width}
-            anchor={0.5}
-            eventMode="dynamic"
-            onclick={() => {
-                if (draggingPiece?.id === id) {
-                    clearDraggingPiece();
-                } else {
-                    const moveTiles = getMoveTiles();
-                    console.log(moveTiles);
-                    moveTiles.allowedTiles = pruneOutboundTiles(
-                        moveTiles.allowedTiles,
-                    );
-                    setDraggingPiece(
-                        id,
-                        moveTiles.allowedTiles,
-                        moveTiles.eatenTiles,
-                    );
+        <>
+            <Sprite
+                image={whitePawn}
+                x={pixelPosition.x}
+                y={pixelPosition.y}
+                height={height}
+                width={width}
+                anchor={0.5}
+                eventMode="dynamic"
+                onclick={() => {
+                    if (draggingPiece?.id === id) {
+                        clearDraggingPiece();
+                    } else {
+                        const moveTiles = getMoveTiles();
+                        console.log(moveTiles);
+                        moveTiles.allowedTiles = pruneOutboundTiles(
+                            moveTiles.allowedTiles,
+                        );
+                        setDraggingPiece(
+                            id,
+                            moveTiles.allowedTiles,
+                            moveTiles.eatenTiles,
+                        );
+                    }
+                }}
+            />
+            <Text
+                text={String(piecePositions[id].kills)}
+                anchor={0.5}
+                x={pixelPosition.x}
+                y={pixelPosition.y}
+                style={
+                    new TextStyle({
+                        fontFamily: 'Arial',
+                        fontSize: 12,
+                        fontWeight: 'bold',
+                    })
                 }
-            }}
-        />
+            />
+        </>
     );
 };
