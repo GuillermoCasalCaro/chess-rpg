@@ -2,8 +2,10 @@ import { Stage, Container, Graphics } from '@pixi/react';
 import { useEffect } from 'react';
 import { Piece } from './Piece';
 import { usePiecePositionsStore } from '../../state/piecePositionsStore';
-import { useDraggingPieceStore } from '../../state/draggingPieceStore';
+import { Tile, useDraggingPieceStore } from '../../state/draggingPieceStore';
 import { initialPositions } from '../initialPositions';
+import { GameStatsSection } from './StatsSection';
+import { useGameStatsStore } from '../../state/gameStatsStore';
 
 export const BOARD_SIZE = 8;
 export const TILE_SIZE = 100;
@@ -13,6 +15,7 @@ export const ChessBoard = () => {
         usePiecePositionsStore();
     const { draggingPiece: draggingPieceId, clearDraggingPiece } =
         useDraggingPieceStore();
+    const { gameStats, setGameStats } = useGameStatsStore();
 
     useEffect(() => {
         initializePositions(initialPositions);
@@ -45,6 +48,17 @@ export const ChessBoard = () => {
         } else {
             return 'rgb(96,56,20)';
         }
+    };
+
+    const movePieceTo = (id: string, tile: Tile) => {
+        const piece = piecePositions[id];
+        piece.tile = tile;
+        setPiecePosition(id, tile.x, tile.y);
+        setGameStats({
+            numberOfRounds: gameStats.numberOfRounds + 1,
+            money: gameStats.money + 3,
+        });
+        clearDraggingPiece();
     };
 
     return (
@@ -85,12 +99,11 @@ export const ChessBoard = () => {
                                         ) {
                                             return;
                                         }
-                                        setPiecePosition(
-                                            draggingPieceId.id,
-                                            col,
-                                            row,
-                                        );
-                                        clearDraggingPiece();
+
+                                        movePieceTo(draggingPieceId.id, {
+                                            x: col,
+                                            y: row,
+                                        });
                                     }}
                                 />
                             );
@@ -109,6 +122,7 @@ export const ChessBoard = () => {
                     );
                 })}
             </Stage>
+            <GameStatsSection />
         </>
     );
 };
