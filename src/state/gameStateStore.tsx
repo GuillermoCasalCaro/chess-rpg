@@ -1,7 +1,5 @@
 import { create } from 'zustand';
 
-export type Tile = { x: number; y: number };
-
 export enum GameState {
     Menu,
     GameStarted,

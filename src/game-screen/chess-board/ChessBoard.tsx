@@ -1,10 +1,11 @@
 import { Stage, Container, Graphics } from '@pixi/react';
 import { useEffect } from 'react';
-import { Piece } from './Piece';
+import { PieceWrapper } from './PieceWrapper';
 import { usePiecePositionsStore } from '../../state/piecePositionsStore';
-import { Tile, useDraggingPieceStore } from '../../state/draggingPieceStore';
+import { useDraggingPieceStore } from '../../state/draggingPieceStore';
 import { GameStatsSection } from './StatsSection';
 import { useGameStatsStore } from '../../state/gameStatsStore';
+import { Tile } from './Pieces/types';
 
 export const BOARD_SIZE = 8;
 export const TILE_SIZE = 100;
@@ -109,14 +110,7 @@ export const ChessBoard = () => {
                 </Container>
 
                 {Object.values(piecePositions).map((piece) => {
-                    return (
-                        <Piece
-                            key={piece.id}
-                            id={piece.id}
-                            type={piece.type}
-                            position={piece.tile}
-                        />
-                    );
+                    return <PieceWrapper key={piece.id} piece={piece} />;
                 })}
             </Stage>
             <GameStatsSection />

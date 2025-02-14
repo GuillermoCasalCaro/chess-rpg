@@ -1,14 +1,6 @@
 import { create } from 'zustand';
-import { Tile } from './draggingPieceStore';
-import { PieceType } from '../game-screen/chess-board/Pieces/types';
 import { getInitialPositions } from '../game-screen/initialPositions';
-
-export type Piece = {
-    id: string;
-    type: PieceType;
-    tile: Tile;
-    numberOfMoves: number;
-};
+import { Piece } from '../game-screen/chess-board/Pieces/types';
 
 export type PiecePositionsStore = {
     piecePositions: Record<string, Piece>;

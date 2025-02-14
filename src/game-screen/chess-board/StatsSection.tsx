@@ -27,7 +27,12 @@ export const GameStatsSection = () => {
                 size="xs"
                 variant="gradient"
                 gradient={{ from: 'blue', to: 'cyan', deg: 90 }}
-                onClick={() => setGameStats({ leftMovesPerRound: 3 })}
+                onClick={() =>
+                    setGameStats({
+                        leftMovesPerRound: 3,
+                        numberOfRounds: gameStats.numberOfRounds + 1,
+                    })
+                }
             >
                 {'NEXT'}
             </Button>

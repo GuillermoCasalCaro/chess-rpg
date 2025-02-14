@@ -1,8 +1,9 @@
 import { Sprite } from '@pixi/react';
-import whitePawn from '/w_pawn.png';
-import { Tile, useDraggingPieceStore } from '../../../state/draggingPieceStore';
+import whitePawn from '/b_pawn.png';
+import { useDraggingPieceStore } from '../../../state/draggingPieceStore';
 import { usePiecePositionsStore } from '../../../state/piecePositionsStore';
 import { isTileOccupied, pruneOutboundTiles, tileToPixel } from './util';
+import { Tile } from './types';
 
 interface PawnProps {
     id: string;

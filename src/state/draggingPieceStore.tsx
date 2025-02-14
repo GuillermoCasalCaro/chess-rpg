@@ -1,6 +1,5 @@
 import { create } from 'zustand';
-
-export type Tile = { x: number; y: number };
+import { Tile } from '../game-screen/chess-board/Pieces/types';
 
 type DraggingPieceStore = {
     draggingPiece: { id: string; allowedTiles: Tile[] } | null;
