@@ -9,22 +9,19 @@ export const tileToPixel = (pos: Tile) => {
     };
 };
 
-export const pruneImpossibleTiles = (
-    allowedTiles: Tile[],
-    piecePositions: PiecePositionsStore['piecePositions'],
-) => {
-    let newAllowedTiles = allowedTiles.filter(({ x, y }) => {
+export const pruneOutboundTiles = (allowedTiles: Tile[]) => {
+    const newAllowedTiles = allowedTiles.filter(({ x, y }) => {
         return x >= 0 && x < BOARD_SIZE && y >= 0 && y < BOARD_SIZE;
-    });
-    
-    const pieces = Object.values(piecePositions);
-    console.log(pieces.map((piece) => piece.tile));
-    console.log(newAllowedTiles);
-    newAllowedTiles = newAllowedTiles.filter(({ x, y }) => {
-        return !pieces.some((piece) => {
-            return piece.tile.x === x && piece.tile.y === y;
-        });
     });
 
     return newAllowedTiles;
+};
+
+export const isTileOccupied = (
+    tile: Tile,
+    piecePositions: PiecePositionsStore['piecePositions'],
+) => {
+    return Object.values(piecePositions).some(
+        (p) => p.tile.x === tile.x && p.tile.y === tile.y,
+    );
 };

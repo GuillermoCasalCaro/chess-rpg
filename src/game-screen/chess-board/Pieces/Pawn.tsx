@@ -2,7 +2,7 @@ import { Sprite } from '@pixi/react';
 import whitePawn from '/w_pawn.png';
 import { Tile, useDraggingPieceStore } from '../../../state/draggingPieceStore';
 import { usePiecePositionsStore } from '../../../state/piecePositionsStore';
-import { pruneImpossibleTiles, tileToPixel } from './util';
+import { isTileOccupied, pruneOutboundTiles, tileToPixel } from './util';
 
 interface PawnProps {
     id: string;
@@ -21,6 +21,28 @@ export const Pawn = ({ position, id, height, width }: PawnProps) => {
     const pieceInfo = piecePositions[id];
     const pixelPosition = tileToPixel(position);
 
+    const getAllowedTiles = () => {
+        const allowedTiles = [];
+        const firstFrontTile = { x: position.x, y: position.y - 1 };
+        if (isTileOccupied(firstFrontTile, piecePositions)) {
+            return [];
+        } else {
+            allowedTiles.push(firstFrontTile);
+        }
+
+        if (pieceInfo.numberOfMoves === 0) {
+            const secondFrontTile = {
+                x: position.x,
+                y: position.y - 2,
+            };
+            if (!isTileOccupied(secondFrontTile, piecePositions)) {
+                allowedTiles.push(secondFrontTile);
+            }
+        }
+
+        return allowedTiles;
+    };
+
     return (
         <Sprite
             image={whitePawn}
@@ -34,17 +56,8 @@ export const Pawn = ({ position, id, height, width }: PawnProps) => {
                 if (draggingPieceId?.id === id) {
                     clearDraggingPiece();
                 } else {
-                    let allowedTiles = [{ x: position.x, y: position.y - 1 }];
-                    if (pieceInfo.numberOfMoves === 0) {
-                        allowedTiles.push({
-                            x: position.x,
-                            y: position.y - 2,
-                        });
-                    }
-                    allowedTiles = pruneImpossibleTiles(
-                        allowedTiles,
-                        piecePositions,
-                    );
+                    let allowedTiles = getAllowedTiles();
+                    allowedTiles = pruneOutboundTiles(allowedTiles);
                     setDraggingPieceId(id, allowedTiles);
                 }
             }}

@@ -1,4 +1,5 @@
 import { Button, Container } from '@mantine/core';
+import { GameState, useGameStateStore } from '../state/gameStateStore';
 
 interface MenuProps {
     onStartGame: () => void;
@@ -6,7 +7,8 @@ interface MenuProps {
 }
 
 export const Menu = ({ onStartGame, onContinue }: MenuProps) => {
-    const { gameState, setGameState } = useGameStateStore();
+    const { gameState } = useGameStateStore();
+
     return (
         <div
             style={{
@@ -15,7 +17,7 @@ export const Menu = ({ onStartGame, onContinue }: MenuProps) => {
                 left: '0',
                 width: '100vw',
                 height: '100vh',
-                background: 'rgba(7, 172, 197, 0.25)',
+                background: 'rgb(100, 110, 115, 0.9)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
