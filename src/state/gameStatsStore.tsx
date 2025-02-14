@@ -1,7 +1,5 @@
 import { create } from 'zustand';
 
-export type Tile = { x: number; y: number };
-
 interface GameStats {
     numberOfRounds: number;
     money: number;

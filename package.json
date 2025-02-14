@@ -15,6 +15,7 @@
         "@mantine/hooks": "^7.16.3",
         "@pixi/filter-glow": "^5.2.1",
         "@pixi/react": "^7.1.2",
+        "lodash": "^4.17.21",
         "pixi.js": "^7.0.0",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
@@ -23,6 +24,7 @@
     },
     "devDependencies": {
         "@eslint/js": "^9.19.0",
+        "@types/lodash": "^4.17.15",
         "@types/react": "^18.2.0",
         "@types/react-dom": "^18.2.0",
         "@vitejs/plugin-react": "^4.3.4",

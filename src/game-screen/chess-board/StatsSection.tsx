@@ -1,10 +1,13 @@
 import { Text, Group, Button } from '@mantine/core';
 import { useGameStatsStore } from '../../state/gameStatsStore';
 import { usePiecePositionsStore } from '../../state/piecePositionsStore';
+import { calculateBlackMoves } from './Pieces/black-moves';
+import { useDraggingPieceStore } from '../../state/draggingPieceStore';
 
 export const GameStatsSection = () => {
     const { gameStats, setGameStats } = useGameStatsStore();
-    const { piecePositions } = usePiecePositionsStore();
+    const { piecePositions, setPiecePositions } = usePiecePositionsStore();
+    const { clearDraggingPiece } = useDraggingPieceStore();
 
     return (
         <Group
@@ -21,13 +24,27 @@ export const GameStatsSection = () => {
         >
             <Text size="lg">Round: #{gameStats.numberOfRounds}</Text>
             <Text size="lg">Money: {gameStats.money} $</Text>
-            <Text size="lg">Pieces: {Object.keys(piecePositions).length}</Text>
+            <Text size="lg">
+                Pieces:{' '}
+                {
+                    Object.values(piecePositions).filter(
+                        (p) => p.color === 'white',
+                    ).length
+                }
+            </Text>
             <Text size="lg">Moves: {gameStats.leftMovesPerRound}</Text>
             <Button
                 size="xs"
                 variant="gradient"
                 gradient={{ from: 'blue', to: 'cyan', deg: 90 }}
-                onClick={() => setGameStats({ leftMovesPerRound: 3 })}
+                onClick={() => {
+                    setGameStats({
+                        leftMovesPerRound: 3,
+                        numberOfRounds: gameStats.numberOfRounds + 1,
+                    });
+                    clearDraggingPiece();
+                    setPiecePositions(calculateBlackMoves(piecePositions));
+                }}
             >
                 {'NEXT'}
             </Button>
