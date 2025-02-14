@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { Piece } from './Piece';
 import { usePiecePositionsStore } from '../../state/piecePositionsStore';
 import { useDraggingPieceStore } from '../../state/draggingPieceStore';
-import { initialPositions } from '../initialPositision';
+import { initialPositions } from '../initialPositions';
 import { Button } from '@mantine/core';
 
 export const BOARD_SIZE = 8;

@@ -1,7 +1,9 @@
 import { Button, Container } from '@mantine/core';
 import { GameState, useGameStateStore } from '../state/gameStateStore';
-import { initialPositions } from '../game-screen/initialPositision';
+import { initialPositions } from '../game-screen/initialPositions';
 import { usePiecePositionsStore } from '../state/piecePositionsStore';
+import { useDraggingPieceStore } from '../state/draggingPieceStore';
+import { ChessRPGTitle } from './ChessRPGTitle';
 
 interface MenuProps {
     onStartGame: () => void;
@@ -11,6 +13,7 @@ interface MenuProps {
 export const Menu = ({ onStartGame, onContinue }: MenuProps) => {
     const { gameState } = useGameStateStore();
     const { initializePositions } = usePiecePositionsStore();
+    const { clearDraggingPiece } = useDraggingPieceStore();
 
     return (
         <div
@@ -43,6 +46,7 @@ export const Menu = ({ onStartGame, onContinue }: MenuProps) => {
                         alignItems: 'center',
                     }}
                 >
+                    <ChessRPGTitle />
                     {gameState === GameState.Menu && (
                         <Button
                             size="lg"
@@ -66,6 +70,7 @@ export const Menu = ({ onStartGame, onContinue }: MenuProps) => {
                                 style={{ width: '200px' }}
                                 onClick={() => {
                                     initializePositions(initialPositions);
+                                    clearDraggingPiece();
                                     onContinue();
                                 }}
                             >
