@@ -4,16 +4,11 @@ import { Piece } from './Piece';
 import { usePiecePositionsStore } from '../../state/piecePositionsStore';
 import { useDraggingPieceStore } from '../../state/draggingPieceStore';
 import { initialPositions } from '../initialPositions';
-import { Button } from '@mantine/core';
 
 export const BOARD_SIZE = 8;
 export const TILE_SIZE = 100;
 
-interface ChessBoardProps {
-    onMenuClicked: () => void;
-}
-
-export const ChessBoard = ({ onMenuClicked }: ChessBoardProps) => {
+export const ChessBoard = () => {
     const { piecePositions, initializePositions, setPiecePosition } =
         usePiecePositionsStore();
     const { draggingPiece: draggingPieceId, clearDraggingPiece } =
@@ -114,13 +109,6 @@ export const ChessBoard = ({ onMenuClicked }: ChessBoardProps) => {
                     );
                 })}
             </Stage>
-
-            <Button
-                style={{ position: 'fixed', left: '20px', top: '20px' }}
-                onClick={onMenuClicked}
-            >
-                Go to Menu
-            </Button>
         </>
     );
 };
