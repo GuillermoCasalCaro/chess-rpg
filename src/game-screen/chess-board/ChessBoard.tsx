@@ -58,6 +58,10 @@ export const ChessBoard = ({ onMenuClicked }: ChessBoardProps) => {
                 width={BOARD_SIZE * TILE_SIZE}
                 height={BOARD_SIZE * TILE_SIZE}
                 options={{ backgroundColor: 0x222222 }}
+                style={{
+                    border: '3px solid var(--mantine-color-gray-5)',
+                    borderRadius: '5px',
+                }}
             >
                 <Container>
                     {Array.from({ length: BOARD_SIZE * BOARD_SIZE }).map(
