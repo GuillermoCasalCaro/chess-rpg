@@ -1,5 +1,7 @@
 import { Button, Container } from '@mantine/core';
 import { GameState, useGameStateStore } from '../state/gameStateStore';
+import { initialPositions } from '../game-screen/initialPositision';
+import { usePiecePositionsStore } from '../state/piecePositionsStore';
 
 interface MenuProps {
     onStartGame: () => void;
@@ -8,6 +10,7 @@ interface MenuProps {
 
 export const Menu = ({ onStartGame, onContinue }: MenuProps) => {
     const { gameState } = useGameStateStore();
+    const { initializePositions } = usePiecePositionsStore();
 
     return (
         <div
@@ -32,12 +35,45 @@ export const Menu = ({ onStartGame, onContinue }: MenuProps) => {
                     width: '400px',
                 }}
             >
-                {gameState === GameState.Menu && (
-                    <Button onClick={onStartGame}>Start</Button>
-                )}
-                {gameState === GameState.GameStarted && (
-                    <Button onClick={onContinue}>Resume</Button>
-                )}
+                <div
+                    style={{
+                        display: 'flex',
+                        gap: '10px',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                    }}
+                >
+                    {gameState === GameState.Menu && (
+                        <Button
+                            size="lg"
+                            style={{ width: '200px' }}
+                            onClick={onStartGame}
+                        >
+                            Start
+                        </Button>
+                    )}
+                    {gameState === GameState.GameStarted && (
+                        <>
+                            <Button
+                                size="lg"
+                                style={{ width: '200px' }}
+                                onClick={onContinue}
+                            >
+                                Resume
+                            </Button>
+                            <Button
+                                size="lg"
+                                style={{ width: '200px' }}
+                                onClick={() => {
+                                    initializePositions(initialPositions);
+                                    onContinue();
+                                }}
+                            >
+                                Restart
+                            </Button>
+                        </>
+                    )}
+                </div>
             </Container>
         </div>
     );
