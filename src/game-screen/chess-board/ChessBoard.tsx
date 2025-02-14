@@ -1,6 +1,8 @@
 import { Stage, Container, Graphics } from '@pixi/react';
 import { useCallback, useEffect } from 'react';
 import { PieceWrapper } from './PieceWrapper';
+import { useCallback, useEffect } from 'react';
+import { PieceWrapper } from './PieceWrapper';
 import { usePiecePositionsStore } from '../../state/piecePositionsStore';
 import { useDraggingPieceStore } from '../../state/draggingPieceStore';
 import { GameStatsSection } from './StatsSection';
@@ -52,7 +54,37 @@ export const ChessBoard = () => {
         },
         [draggingPieceId?.allowedTiles],
     );
+    const isDestinationTile = useCallback(
+        (col: number, row: number) => {
+            return Boolean(
+                draggingPieceId?.allowedTiles.filter(
+                    (t) => t.x === col && t.y === row,
+                ).length,
+            );
+        },
+        [draggingPieceId?.allowedTiles],
+    );
 
+    const isEdibleTile = useCallback(
+        (col: number, row: number) => {
+            return Boolean(
+                draggingPieceId?.eatenTiles.filter(
+                    (t) => t.x === col && t.y === row,
+                ).length,
+            );
+        },
+        [draggingPieceId?.eatenTiles],
+    );
+
+    const getTileKind = useCallback(
+        (col: number, row: number) => {
+            const isDraggingPieceTile =
+                !!draggingPieceId &&
+                piecePositions[draggingPieceId.id].tile.x === col &&
+                piecePositions[draggingPieceId.id].tile.y === row;
+            if (isDraggingPieceTile) {
+                return TileKind.SELECTED;
+            }
     const isEdibleTile = useCallback(
         (col: number, row: number) => {
             return Boolean(
