@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import { Piece } from './Piece';
 import { usePiecePositionsStore } from '../../state/piecePositionsStore';
 import { Tile, useDraggingPieceStore } from '../../state/draggingPieceStore';
-import { initialPositions } from '../initialPositions';
 import { GameStatsSection } from './StatsSection';
 import { useGameStatsStore } from '../../state/gameStatsStore';
 
@@ -18,7 +17,7 @@ export const ChessBoard = () => {
     const { gameStats, decreaseLeftMovesPerRound } = useGameStatsStore();
 
     useEffect(() => {
-        initializePositions(initialPositions);
+        initializePositions();
     }, [initializePositions]);
 
     const isDestinationTile = (col: number, row: number) => {

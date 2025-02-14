@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { Tile } from './draggingPieceStore';
 import { PieceType } from '../game-screen/chess-board/Pieces/types';
+import { getInitialPositions } from '../game-screen/initialPositions';
 
 export type Piece = {
     id: string;
@@ -11,15 +12,16 @@ export type Piece = {
 
 export type PiecePositionsStore = {
     piecePositions: Record<string, Piece>;
-    initializePositions: (positions: Record<string, Piece>) => void;
+    initializePositions: () => void;
     setPiecePosition: (id: string, x: number, y: number) => void;
+    resetPiecePositions: () => void;
 };
 
 export const usePiecePositionsStore = create<PiecePositionsStore>((set) => ({
     piecePositions: {},
-    initializePositions: (positions) =>
+    initializePositions: () =>
         set(() => ({
-            piecePositions: positions,
+            piecePositions: getInitialPositions(),
         })),
     setPiecePosition: (id, x, y) =>
         set((state) => {
@@ -33,6 +35,12 @@ export const usePiecePositionsStore = create<PiecePositionsStore>((set) => ({
                         numberOfMoves: piece.numberOfMoves + 1,
                     },
                 },
+            };
+        }),
+    resetPiecePositions: () =>
+        set(() => {
+            return {
+                piecePositions: getInitialPositions(),
             };
         }),
 }));

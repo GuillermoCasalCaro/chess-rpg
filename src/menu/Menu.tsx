@@ -1,9 +1,9 @@
 import { Button, Container } from '@mantine/core';
 import { GameState, useGameStateStore } from '../state/gameStateStore';
-import { initialPositions } from '../game-screen/initialPositions';
 import { usePiecePositionsStore } from '../state/piecePositionsStore';
 import { useDraggingPieceStore } from '../state/draggingPieceStore';
 import { ChessRPGTitle } from './ChessRPGTitle';
+import { useGameStatsStore } from '../state/gameStatsStore';
 
 interface MenuProps {
     onStartGame: () => void;
@@ -12,7 +12,8 @@ interface MenuProps {
 
 export const Menu = ({ onStartGame, onContinue }: MenuProps) => {
     const { gameState } = useGameStateStore();
-    const { initializePositions } = usePiecePositionsStore();
+    const { resetGameStats } = useGameStatsStore();
+    const { resetPiecePositions } = usePiecePositionsStore();
     const { clearDraggingPiece } = useDraggingPieceStore();
 
     return (
@@ -69,8 +70,9 @@ export const Menu = ({ onStartGame, onContinue }: MenuProps) => {
                                 size="lg"
                                 style={{ width: '200px' }}
                                 onClick={() => {
-                                    initializePositions(initialPositions);
+                                    resetPiecePositions();
                                     clearDraggingPiece();
+                                    resetGameStats();
                                     onContinue();
                                 }}
                             >
