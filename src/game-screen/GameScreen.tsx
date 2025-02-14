@@ -3,11 +3,7 @@ import { ChessBoard } from './chess-board/ChessBoard';
 import { Shop } from './shop/Shop';
 import { Upgrades } from './upgrades/Upgrades';
 
-interface GameScreenProps {
-    onMenuClicked: () => void;
-}
-
-export const GameScreen = ({ onMenuClicked }: GameScreenProps) => {
+export const GameScreen = () => {
     return (
         <Container
             fluid
@@ -21,7 +17,7 @@ export const GameScreen = ({ onMenuClicked }: GameScreenProps) => {
                 <Shop />
             </Container>
             <Container style={{ width: '850px' }}>
-                <ChessBoard onMenuClicked={onMenuClicked} />
+                <ChessBoard />
             </Container>
             <Container style={{ flexGrow: 1 }}>
                 <Upgrades />
