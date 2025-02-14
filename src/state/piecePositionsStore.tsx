@@ -1,11 +1,16 @@
 import { create } from 'zustand';
 import { getInitialPositions } from '../game-screen/initialPositions';
-import { PiecePositions, Tile } from '../game-screen/chess-board/Pieces/types';
+import {
+    Piece,
+    PiecePositions,
+    Tile,
+} from '../game-screen/chess-board/Pieces/types';
 
 export type PiecePositionsStore = {
     piecePositions: PiecePositions;
     initializePositions: () => void;
     setPiecePosition: (id: string, x: number, y: number) => void;
+    setPieceData: (id: string, piece: Partial<Piece>) => void;
     setPiecePositions: (piecePositions: PiecePositions) => void;
     deletePiece: (id: string) => void;
     deletePieceByTile: (tile: Tile) => void;
@@ -28,6 +33,18 @@ export const usePiecePositionsStore = create<PiecePositionsStore>((set) => ({
                         ...piece,
                         tile: { x, y },
                         numberOfMoves: piece.numberOfMoves + 1,
+                    },
+                },
+            };
+        }),
+    setPieceData: (id, piece) =>
+        set((state) => {
+            return {
+                piecePositions: {
+                    ...state.piecePositions,
+                    [id]: {
+                        ...state.piecePositions[id],
+                        ...piece,
                     },
                 },
             };
