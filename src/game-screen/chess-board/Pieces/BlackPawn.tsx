@@ -21,7 +21,7 @@ export const BlackPawn = ({ position, height, width }: PawnProps) => {
             height={height}
             width={width}
             anchor={0.5}
-            eventMode="static"
+            eventMode="passive"
         />
     );
 };

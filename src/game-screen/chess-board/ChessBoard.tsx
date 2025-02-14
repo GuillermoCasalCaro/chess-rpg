@@ -1,5 +1,5 @@
 import { Stage, Container, Graphics } from '@pixi/react';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { PieceWrapper } from './PieceWrapper';
 import { usePiecePositionsStore } from '../../state/piecePositionsStore';
 import { useDraggingPieceStore } from '../../state/draggingPieceStore';
@@ -9,10 +9,28 @@ import { Tile } from './Pieces/types';
 
 export const BOARD_SIZE = 8;
 export const TILE_SIZE = 100;
+export enum TileKind {
+    SELECTED,
+    MOVABLE,
+    EDIBLE,
+    DEFAULT_EVEN,
+    DEFAULT_ODD,
+}
+const TILE_COLORS = {
+    [TileKind.SELECTED]: 'rgb(45, 189, 40)',
+    [TileKind.MOVABLE]: 'rgb(206, 206, 0)',
+    [TileKind.EDIBLE]: 'rgb(119, 12, 161)',
+    [TileKind.DEFAULT_EVEN]: 'rgb(249,223,189)',
+    [TileKind.DEFAULT_ODD]: 'rgb(96,56,20)',
+};
 
 export const ChessBoard = () => {
-    const { piecePositions, initializePositions, setPiecePosition } =
-        usePiecePositionsStore();
+    const {
+        piecePositions,
+        initializePositions,
+        setPiecePosition,
+        deletePieceByTile,
+    } = usePiecePositionsStore();
     const { draggingPiece: draggingPieceId, clearDraggingPiece } =
         useDraggingPieceStore();
     const { gameStats, decreaseLeftMovesPerRound } = useGameStatsStore();
@@ -21,35 +39,62 @@ export const ChessBoard = () => {
         initializePositions();
     }, [initializePositions]);
 
-    const isDestinationTile = (col: number, row: number) => {
-        if (gameStats.leftMovesPerRound === 0) return false;
-        return Boolean(
-            draggingPieceId?.allowedTiles.filter(
-                (t) => t.x === col && t.y === row,
-            ).length,
-        );
-    };
+    const isDestinationTile = useCallback(
+        (col: number, row: number) => {
+            return Boolean(
+                draggingPieceId?.allowedTiles.filter(
+                    (t) => t.x === col && t.y === row,
+                ).length,
+            );
+        },
+        [draggingPieceId?.allowedTiles],
+    );
 
-    const getTileColor = (col: number, row: number) => {
-        const isDraggingPieceTile =
-            !!draggingPieceId &&
-            piecePositions[draggingPieceId.id].tile.x === col &&
-            piecePositions[draggingPieceId.id].tile.y === row;
-        if (isDraggingPieceTile) {
-            return 'rgb(62, 219, 56)';
-        }
+    const isEdibleTile = useCallback(
+        (col: number, row: number) => {
+            return Boolean(
+                draggingPieceId?.eatenTiles.filter(
+                    (t) => t.x === col && t.y === row,
+                ).length,
+            );
+        },
+        [draggingPieceId?.eatenTiles],
+    );
 
-        if (isDestinationTile(col, row)) {
-            return 'rgb(255,255,0)';
-        }
+    const getTileKind = useCallback(
+        (col: number, row: number) => {
+            const isDraggingPieceTile =
+                !!draggingPieceId &&
+                piecePositions[draggingPieceId.id].tile.x === col &&
+                piecePositions[draggingPieceId.id].tile.y === row;
+            if (isDraggingPieceTile) {
+                return TileKind.SELECTED;
+            }
 
-        const isEven = (col + row) % 2 === 0;
-        if (isEven) {
-            return 'rgb(249,223,189)';
-        } else {
-            return 'rgb(96,56,20)';
-        }
-    };
+            if (gameStats.leftMovesPerRound > 0) {
+                if (isDestinationTile(col, row)) {
+                    return TileKind.MOVABLE;
+                }
+                if (isEdibleTile(col, row)) {
+                    return TileKind.EDIBLE;
+                }
+            }
+
+            const isEven = (col + row) % 2 === 0;
+            if (isEven) {
+                return TileKind.DEFAULT_EVEN;
+            } else {
+                return TileKind.DEFAULT_ODD;
+            }
+        },
+        [
+            draggingPieceId,
+            gameStats.leftMovesPerRound,
+            isDestinationTile,
+            isEdibleTile,
+            piecePositions,
+        ],
+    );
 
     const movePieceTo = (id: string, tile: Tile) => {
         const piece = piecePositions[id];
@@ -75,12 +120,12 @@ export const ChessBoard = () => {
                         (_, index) => {
                             const row = Math.floor(index / BOARD_SIZE);
                             const col = index % BOARD_SIZE;
-
+                            const tileKind = getTileKind(col, row);
                             return (
                                 <Graphics
                                     key={`tile${col}${row}`}
                                     draw={(g) => {
-                                        g.beginFill(getTileColor(col, row));
+                                        g.beginFill(TILE_COLORS[tileKind]);
                                         g.drawRect(
                                             col * TILE_SIZE,
                                             row * TILE_SIZE,
@@ -91,17 +136,25 @@ export const ChessBoard = () => {
                                     }}
                                     eventMode="static"
                                     onclick={() => {
-                                        if (
-                                            !draggingPieceId ||
-                                            !isDestinationTile(col, row)
-                                        ) {
+                                        console.log(tileKind);
+                                        if (tileKind === TileKind.MOVABLE) {
+                                            movePieceTo(draggingPieceId!.id, {
+                                                x: col,
+                                                y: row,
+                                            });
                                             return;
                                         }
-
-                                        movePieceTo(draggingPieceId.id, {
-                                            x: col,
-                                            y: row,
-                                        });
+                                        if (tileKind === TileKind.EDIBLE) {
+                                            console.log('edible');
+                                            deletePieceByTile({
+                                                x: col,
+                                                y: row,
+                                            });
+                                            movePieceTo(draggingPieceId!.id, {
+                                                x: col,
+                                                y: row,
+                                            });
+                                        }
                                     }}
                                 />
                             );

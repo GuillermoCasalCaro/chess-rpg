@@ -13,20 +13,19 @@ interface PawnProps {
 }
 
 export const WhitePawn = ({ position, id, height, width }: PawnProps) => {
-    const {
-        draggingPiece: draggingPieceId,
-        setDraggingPiece: setDraggingPieceId,
-        clearDraggingPiece,
-    } = useDraggingPieceStore();
+    const { draggingPiece, setDraggingPiece, clearDraggingPiece } =
+        useDraggingPieceStore();
     const { piecePositions } = usePiecePositionsStore();
     const pieceInfo = piecePositions[id];
     const pixelPosition = tileToPixel(position);
 
-    const getAllowedTiles = () => {
-        const allowedTiles = [];
+    const getMoveTiles = () => {
+        const allowedTiles: Tile[] = [];
+        const eatenTiles: Tile[] = [];
+
         const firstFrontTile = { x: position.x, y: position.y - 1 };
         if (isTileOccupied(firstFrontTile, piecePositions)) {
-            return [];
+            return { allowedTiles, eatenTiles };
         } else {
             allowedTiles.push(firstFrontTile);
         }
@@ -41,7 +40,29 @@ export const WhitePawn = ({ position, id, height, width }: PawnProps) => {
             }
         }
 
-        return allowedTiles;
+        const leftDiagonalPiece = isTileOccupied(
+            {
+                x: position.x - 1,
+                y: position.y - 1,
+            },
+            piecePositions,
+        );
+        const rightDiagonalPiece = isTileOccupied(
+            {
+                x: position.x + 1,
+                y: position.y - 1,
+            },
+            piecePositions,
+        );
+
+        if (leftDiagonalPiece && leftDiagonalPiece.color === 'black') {
+            eatenTiles.push(leftDiagonalPiece.tile);
+        }
+        if (rightDiagonalPiece && rightDiagonalPiece.color === 'black') {
+            eatenTiles.push(rightDiagonalPiece.tile);
+        }
+
+        return { allowedTiles, eatenTiles };
     };
 
     return (
@@ -54,12 +75,19 @@ export const WhitePawn = ({ position, id, height, width }: PawnProps) => {
             anchor={0.5}
             eventMode="dynamic"
             onclick={() => {
-                if (draggingPieceId?.id === id) {
+                if (draggingPiece?.id === id) {
                     clearDraggingPiece();
                 } else {
-                    let allowedTiles = getAllowedTiles();
-                    allowedTiles = pruneOutboundTiles(allowedTiles);
-                    setDraggingPieceId(id, allowedTiles);
+                    const moveTiles = getMoveTiles();
+                    console.log(moveTiles);
+                    moveTiles.allowedTiles = pruneOutboundTiles(
+                        moveTiles.allowedTiles,
+                    );
+                    setDraggingPiece(
+                        id,
+                        moveTiles.allowedTiles,
+                        moveTiles.eatenTiles,
+                    );
                 }
             }}
         />

@@ -2,10 +2,12 @@ import { Text, Group, Button } from '@mantine/core';
 import { useGameStatsStore } from '../../state/gameStatsStore';
 import { usePiecePositionsStore } from '../../state/piecePositionsStore';
 import { calculateBlackMoves } from './Pieces/black-moves';
+import { useDraggingPieceStore } from '../../state/draggingPieceStore';
 
 export const GameStatsSection = () => {
     const { gameStats, setGameStats } = useGameStatsStore();
     const { piecePositions, setPiecePositions } = usePiecePositionsStore();
+    const { clearDraggingPiece } = useDraggingPieceStore();
 
     return (
         <Group
@@ -40,6 +42,7 @@ export const GameStatsSection = () => {
                         leftMovesPerRound: 3,
                         numberOfRounds: gameStats.numberOfRounds + 1,
                     });
+                    clearDraggingPiece();
                     setPiecePositions(calculateBlackMoves(piecePositions));
                 }}
             >

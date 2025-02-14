@@ -21,7 +21,8 @@ export const isTileOccupied = (
     tile: Tile,
     piecePositions: PiecePositionsStore['piecePositions'],
 ) => {
-    return Object.values(piecePositions).some(
+    const piece = Object.values(piecePositions).find(
         (p) => p.tile.x === tile.x && p.tile.y === tile.y,
     );
+    return piece;
 };

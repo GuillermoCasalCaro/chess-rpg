@@ -11,44 +11,78 @@ export const calculateBlackMoves = (piecePositions: PiecePositions) => {
 
     blackPieceIDs.forEach((id) => {
         const piece = updatedPositions[id];
-        const newTile = getNewTile(piece, updatedPositions);
-        updatedPositions[id] = {
-            ...piece,
-            tile: newTile,
-        };
+        setNewTile(piece, updatedPositions);
     });
 
     return updatedPositions;
 };
 
-const getNewTile = (piece: Piece, positions: PiecePositions) => {
+const setNewTile = (piece: Piece, positions: PiecePositions) => {
     switch (piece.type) {
         case 'pawn':
             return moveBlackPawn(piece, positions);
-        case 'rook':
-            return moveBlackRook(piece);
     }
 };
 
 const moveBlackPawn = (piece: Piece, positions: PiecePositions) => {
+    const leftDiagonalPiece = isTileOccupied(
+        {
+            x: piece.tile.x - 1,
+            y: piece.tile.y + 1,
+        },
+        positions,
+    );
+    const rightDiagonalPiece = isTileOccupied(
+        {
+            x: piece.tile.x + 1,
+            y: piece.tile.y + 1,
+        },
+        positions,
+    );
     const frontTile: Tile = {
         x: piece.tile.x,
         y: piece.tile.y + 1,
     };
 
-    if (isTileOccupied(frontTile, positions)) {
-        return {
-            x: piece.tile.x,
-            y: piece.tile.y,
+    if (leftDiagonalPiece && rightDiagonalPiece) {
+        const random = Math.random();
+        if (random < 0.5) {
+            deletePiece(leftDiagonalPiece, positions);
+            positions[piece.id] = {
+                ...piece,
+                tile: leftDiagonalPiece.tile,
+            };
+            return;
+        }
+
+        deletePiece(rightDiagonalPiece, positions);
+        positions[piece.id] = {
+            ...piece,
+            tile: rightDiagonalPiece.tile,
         };
+        return;
     }
 
-    return frontTile;
+    if (leftDiagonalPiece || rightDiagonalPiece) {
+        const pieceToDelete = leftDiagonalPiece ?? rightDiagonalPiece!;
+        deletePiece(pieceToDelete, positions);
+        positions[piece.id] = {
+            ...piece,
+            tile: pieceToDelete.tile,
+        };
+        return;
+    }
+
+    if (isTileOccupied(frontTile, positions)) {
+        return;
+    }
+
+    positions[piece.id] = {
+        ...piece,
+        tile: frontTile,
+    };
 };
 
-const moveBlackRook = (piece: Piece) => {
-    return {
-        x: piece.tile.x,
-        y: piece.tile.y + 1,
-    };
+const deletePiece = (piece: Piece, positions: PiecePositions) => {
+    delete positions[piece.id];
 };
