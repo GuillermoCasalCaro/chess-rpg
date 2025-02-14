@@ -46,7 +46,7 @@ export const WhiteRook = ({ id, position, height, width }: RookProps) => {
             allowedTiles.push(tile);
         }
         allowedTiles = pruneOutboundTiles(allowedTiles);
-        setDraggingPieceId(id, allowedTiles);
+        setDraggingPieceId(id, allowedTiles, []);
     };
 
     return (
