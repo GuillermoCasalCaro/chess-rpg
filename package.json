@@ -13,6 +13,8 @@
     "dependencies": {
         "@mantine/core": "^7.16.3",
         "@mantine/hooks": "^7.16.3",
+        "@pixi/filter-adjustment": "^5.1.1",
+        "@pixi/filter-color-matrix": "^7.4.2",
         "@pixi/filter-glow": "^5.2.1",
         "@pixi/react": "^7.1.2",
         "lodash": "^4.17.21",
