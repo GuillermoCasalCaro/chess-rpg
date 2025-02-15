@@ -25,19 +25,17 @@ export const WhitePawn = ({ position, id, height, width }: PawnProps) => {
         const eatenTiles: Tile[] = [];
 
         const firstFrontTile = { x: position.x, y: position.y - 1 };
-        if (isTileOccupied(firstFrontTile, piecePositions)) {
-            return { allowedTiles, eatenTiles };
-        } else {
+        if (!isTileOccupied(firstFrontTile, piecePositions)) {
             allowedTiles.push(firstFrontTile);
-        }
 
-        if (pieceInfo.numberOfMoves === 0) {
-            const secondFrontTile = {
-                x: position.x,
-                y: position.y - 2,
-            };
-            if (!isTileOccupied(secondFrontTile, piecePositions)) {
-                allowedTiles.push(secondFrontTile);
+            if (pieceInfo.numberOfMoves === 0) {
+                const secondFrontTile = {
+                    x: position.x,
+                    y: position.y - 2,
+                };
+                if (!isTileOccupied(secondFrontTile, piecePositions)) {
+                    allowedTiles.push(secondFrontTile);
+                }
             }
         }
 

@@ -1,6 +1,6 @@
 import { Piece, PiecePositions, Tile } from './types';
 import _ from 'lodash';
-import { isTileOccupied } from './util';
+import { isTileOccupied, isTileOccupiedAnd } from './util';
 
 export const calculateBlackMoves = (piecePositions: PiecePositions) => {
     const updatedPositions = _.cloneDeep(piecePositions);
@@ -25,19 +25,22 @@ const setNewTile = (piece: Piece, positions: PiecePositions) => {
 };
 
 const moveBlackPawn = (piece: Piece, positions: PiecePositions) => {
-    const leftDiagonalPiece = isTileOccupied(
+    const isWhite = (p: Piece) => p.color === 'white';
+    const leftDiagonalPiece = isTileOccupiedAnd(
         {
             x: piece.tile.x - 1,
             y: piece.tile.y + 1,
         },
         positions,
+        isWhite,
     );
-    const rightDiagonalPiece = isTileOccupied(
+    const rightDiagonalPiece = isTileOccupiedAnd(
         {
             x: piece.tile.x + 1,
             y: piece.tile.y + 1,
         },
         positions,
+        isWhite,
     );
     const frontTile: Tile = {
         x: piece.tile.x,

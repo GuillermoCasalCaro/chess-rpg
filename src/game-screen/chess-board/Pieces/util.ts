@@ -1,6 +1,6 @@
 import { PiecePositionsStore } from '../../../state/piecePositionsStore';
 import { BOARD_SIZE, TILE_SIZE } from '../ChessBoard';
-import { Tile } from './types';
+import { Piece, Tile } from './types';
 
 export const tileToPixel = (pos: Tile) => {
     return {
@@ -23,6 +23,17 @@ export const isTileOccupied = (
 ) => {
     const piece = Object.values(piecePositions).find(
         (p) => p.tile.x === tile.x && p.tile.y === tile.y,
+    );
+    return piece;
+};
+
+export const isTileOccupiedAnd = (
+    tile: Tile,
+    piecePositions: PiecePositionsStore['piecePositions'],
+    check: (piece:Piece) => boolean,
+) => {
+    const piece = Object.values(piecePositions).find(
+        (p) => p.tile.x === tile.x && p.tile.y === tile.y && check(p),
     );
     return piece;
 };

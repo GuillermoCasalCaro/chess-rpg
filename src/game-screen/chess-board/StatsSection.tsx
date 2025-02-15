@@ -3,6 +3,7 @@ import { useGameStatsStore } from '../../state/gameStatsStore';
 import { usePiecePositionsStore } from '../../state/piecePositionsStore';
 import { calculateBlackMoves } from './Pieces/black-moves';
 import { useDraggingPieceStore } from '../../state/draggingPieceStore';
+import { generatePieces } from './Pieces/black-generation';
 
 export const GameStatsSection = () => {
     const { gameStats, setGameStats } = useGameStatsStore();
@@ -43,7 +44,11 @@ export const GameStatsSection = () => {
                         numberOfRounds: gameStats.numberOfRounds + 1,
                     });
                     clearDraggingPiece();
-                    setPiecePositions(calculateBlackMoves(piecePositions));
+                    const movedBlackPieces =
+                        calculateBlackMoves(piecePositions);
+                    const generatedBlackPieces =
+                        generatePieces(movedBlackPieces);
+                    setPiecePositions(generatedBlackPieces);
                 }}
             >
                 {'NEXT'}
