@@ -5,7 +5,6 @@ import { calculateBlackMoves } from './Pieces/black-moves';
 import { useDraggingPieceStore } from '../../state/draggingPieceStore';
 import { generatePieces } from './Pieces/black-generation';
 import { GameState, useGameStateStore } from '../../state/gameStateStore';
-import { set } from 'lodash';
 
 export const GameStatsSection = () => {
     const { gameStats, setGameStats } = useGameStatsStore();
