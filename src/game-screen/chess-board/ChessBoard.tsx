@@ -102,6 +102,7 @@ export const ChessBoard = () => {
     const movePieceTo = (id: string, tile: Tile, tileKind: TileKind) => {
         const piece = _.cloneDeep(piecePositions[id]);
         piece.tile = tile;
+        piece.numberOfMoves = piece.numberOfMoves + 1;
 
         if (tileKind === TileKind.EDIBLE) {
             piece.kills = piece.kills + 1;
