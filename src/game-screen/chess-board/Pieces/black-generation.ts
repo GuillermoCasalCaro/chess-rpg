@@ -9,8 +9,6 @@ export const generatePieces = (piecePositions: PiecePositions) => {
     const topTilesOccupied = Object.values(newPieces).filter((p) => p.tile.y === 0).map((p) => p.tile.x);
     const emptyTopTiles = topTiles.filter((t) => !topTilesOccupied.includes(t));
 
-    console.log(emptyTopTiles);
-
     if (emptyTopTiles.length > 0) {
         const randomEmptyTile = emptyTopTiles[Math.floor(Math.random() * emptyTopTiles.length)];
         const piece = {

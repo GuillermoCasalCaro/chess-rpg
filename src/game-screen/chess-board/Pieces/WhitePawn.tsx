@@ -79,7 +79,6 @@ export const WhitePawn = ({ position, id, height, width }: PawnProps) => {
                         clearDraggingPiece();
                     } else {
                         const moveTiles = getMoveTiles();
-                        console.log(moveTiles);
                         moveTiles.allowedTiles = pruneOutboundTiles(
                             moveTiles.allowedTiles,
                         );
