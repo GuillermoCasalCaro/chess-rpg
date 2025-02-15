@@ -37,3 +37,21 @@ export const isTileOccupiedAnd = (
     );
     return piece;
 };
+
+export const getPieceValue = (piece: Piece) => {
+    switch (piece.type) {
+        case 'pawn':
+            return 1;
+        case 'rook':
+            return 5;
+    } 
+};
+
+export const shouldLevelUp = (piece: Piece) => {
+    switch (piece.type) {
+        case 'pawn':
+            return piece.kills >= 3 && piece.level <= 1;
+        case 'rook':
+            return piece.kills >= 5 && piece.level <= 1;
+    }
+};

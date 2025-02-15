@@ -1,5 +1,6 @@
 import { Sprite, Text } from '@pixi/react';
 import whitePawn from '/w_pawn.png';
+import whiteBronzePawn from '/w_pawn_bronze.png';
 import { useDraggingPieceStore } from '../../../state/draggingPieceStore';
 import { usePiecePositionsStore } from '../../../state/piecePositionsStore';
 import { isTileOccupied, pruneOutboundTiles, tileToPixel } from './util';
@@ -61,13 +62,33 @@ export const WhitePawn = ({ position, id, height, width }: PawnProps) => {
             eatenTiles.push(rightDiagonalPiece.tile);
         }
 
+        const backTile: Tile = {
+            x: position.x,
+            y: position.y + 1,
+        };
+        if (
+            pieceInfo.level === 2 &&
+            !isTileOccupied(backTile, piecePositions)
+        ) {
+            allowedTiles.push(backTile);
+        }
+
         return { allowedTiles, eatenTiles };
+    };
+
+    const getTexture = () => {
+        switch (pieceInfo.level) {
+            case 1:
+                return whitePawn;
+            case 2:
+                return whiteBronzePawn;
+        }
     };
 
     return (
         <>
             <Sprite
-                image={whitePawn}
+                image={getTexture()}
                 x={pixelPosition.x}
                 y={pixelPosition.y}
                 height={height}

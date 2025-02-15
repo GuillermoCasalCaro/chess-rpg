@@ -8,5 +8,6 @@ export type Piece = {
     numberOfMoves: number;
     color: PieceColor;
     kills: number;
+    level: number;
 };
 export type PiecePositions = Record<string, Piece>;

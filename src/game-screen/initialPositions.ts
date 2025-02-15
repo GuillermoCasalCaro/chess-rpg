@@ -47,6 +47,7 @@ export const getInitialPositions: () => PiecePositions = () =>
             id,
             numberOfMoves: 0,
             kills: 0,
+            level: 1,
         };
         return acc;
     }, {});

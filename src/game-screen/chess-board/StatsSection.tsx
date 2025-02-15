@@ -46,8 +46,11 @@ export const GameStatsSection = () => {
                     clearDraggingPiece();
                     const movedBlackPieces =
                         calculateBlackMoves(piecePositions);
-                    const generatedBlackPieces =
-                        generatePieces(movedBlackPieces);
+
+                    let generatedBlackPieces = movedBlackPieces;
+                    if (gameStats.numberOfRounds < 20) {
+                        generatedBlackPieces = generatePieces(movedBlackPieces);
+                    }
                     setPiecePositions(generatedBlackPieces);
                 }}
             >

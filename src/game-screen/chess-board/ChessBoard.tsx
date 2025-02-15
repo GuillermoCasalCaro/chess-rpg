@@ -6,7 +6,7 @@ import { useDraggingPieceStore } from '../../state/draggingPieceStore';
 import { GameStatsSection } from './StatsSection';
 import { useGameStatsStore } from '../../state/gameStatsStore';
 import { Tile } from './Pieces/types';
-import _ from 'lodash';
+import { getPieceValue, shouldLevelUp } from './Pieces/util';
 
 export const BOARD_SIZE = 8;
 export const TILE_SIZE = 100;
@@ -33,10 +33,11 @@ export const ChessBoard = () => {
         initializePositions,
         setPieceData,
         deletePieceByTile,
+        getPieceByTile,
     } = usePiecePositionsStore();
-    const { draggingPiece: draggingPieceId, clearDraggingPiece } =
-        useDraggingPieceStore();
-    const { gameStats, decreaseLeftMovesPerRound } = useGameStatsStore();
+    const { draggingPiece, clearDraggingPiece } = useDraggingPieceStore();
+    const { gameStats, decreaseLeftMovesPerRound, setGameStats } =
+        useGameStatsStore();
 
     useEffect(() => {
         initializePositions();
@@ -45,31 +46,31 @@ export const ChessBoard = () => {
     const isDestinationTile = useCallback(
         (col: number, row: number) => {
             return Boolean(
-                draggingPieceId?.allowedTiles.filter(
+                draggingPiece?.allowedTiles.filter(
                     (t) => t.x === col && t.y === row,
                 ).length,
             );
         },
-        [draggingPieceId?.allowedTiles],
+        [draggingPiece?.allowedTiles],
     );
 
     const isEdibleTile = useCallback(
         (col: number, row: number) => {
             return Boolean(
-                draggingPieceId?.eatenTiles.filter(
+                draggingPiece?.eatenTiles.filter(
                     (t) => t.x === col && t.y === row,
                 ).length,
             );
         },
-        [draggingPieceId?.eatenTiles],
+        [draggingPiece?.eatenTiles],
     );
 
     const getTileKind = useCallback(
         (col: number, row: number) => {
             const isDraggingPieceTile =
-                !!draggingPieceId &&
-                piecePositions[draggingPieceId.id].tile.x === col &&
-                piecePositions[draggingPieceId.id].tile.y === row;
+                !!draggingPiece &&
+                piecePositions[draggingPiece.id].tile.x === col &&
+                piecePositions[draggingPiece.id].tile.y === row;
             if (isDraggingPieceTile) {
                 return TileKind.SELECTED;
             }
@@ -91,7 +92,7 @@ export const ChessBoard = () => {
             }
         },
         [
-            draggingPieceId,
+            draggingPiece,
             gameStats.leftMovesPerRound,
             isDestinationTile,
             isEdibleTile,
@@ -100,15 +101,28 @@ export const ChessBoard = () => {
     );
 
     const movePieceTo = (id: string, tile: Tile, tileKind: TileKind) => {
-        const piece = _.cloneDeep(piecePositions[id]);
-        piece.tile = tile;
-        piece.numberOfMoves = piece.numberOfMoves + 1;
+        const pieceToMove = {
+            ...piecePositions[id],
+            tile,
+            numberOfMoves: piecePositions[id].numberOfMoves + 1,
+        };
 
-        if (tileKind === TileKind.EDIBLE) {
-            piece.kills = piece.kills + 1;
+        const killedPiece = getPieceByTile(tile);
+        if (tileKind === TileKind.EDIBLE && killedPiece) {
+            pieceToMove.kills = pieceToMove.kills + 1;
+            setGameStats({
+                money: gameStats.money + getPieceValue(killedPiece),
+            });
+            deletePieceByTile(tile);
+            setGameStats({
+                money: gameStats.money + 100,
+            });
+            if (shouldLevelUp(pieceToMove)) {
+                pieceToMove.level = pieceToMove.level + 1;
+            }
         }
 
-        setPieceData(id, piece);
+        setPieceData(id, pieceToMove);
         decreaseLeftMovesPerRound();
         clearDraggingPiece();
     };
@@ -147,7 +161,7 @@ export const ChessBoard = () => {
                                     onclick={() => {
                                         if (tileKind === TileKind.MOVABLE) {
                                             movePieceTo(
-                                                draggingPieceId!.id,
+                                                draggingPiece!.id,
                                                 {
                                                     x: col,
                                                     y: row,
@@ -157,12 +171,8 @@ export const ChessBoard = () => {
                                             return;
                                         }
                                         if (tileKind === TileKind.EDIBLE) {
-                                            deletePieceByTile({
-                                                x: col,
-                                                y: row,
-                                            });
                                             movePieceTo(
-                                                draggingPieceId!.id,
+                                                draggingPiece!.id,
                                                 {
                                                     x: col,
                                                     y: row,

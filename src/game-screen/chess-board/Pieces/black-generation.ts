@@ -20,6 +20,7 @@ export const generatePieces = (piecePositions: PiecePositions) => {
             allowedTiles: [],
             eatenTiles: [],
             numberOfMoves: 0,
+            level: 1,
         } as Piece;
         newPieces[piece.id] = piece;
     }
