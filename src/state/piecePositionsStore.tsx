@@ -5,6 +5,7 @@ import {
     PiecePositions,
     Tile,
 } from '../game-screen/chess-board/Pieces/types';
+import { BOARD_SIZE } from '../game-screen/chess-board/ChessBoard';
 
 export type PiecePositionsStore = {
     piecePositions: PiecePositions;
@@ -16,6 +17,7 @@ export type PiecePositionsStore = {
     getPieceByTile: (tile: Tile) => Piece | undefined;
     deletePieceByTile: (tile: Tile) => void;
     resetPiecePositions: () => void;
+    finishPositions: () => void;
 };
 
 export const usePiecePositionsStore = create<PiecePositionsStore>(
@@ -88,6 +90,23 @@ export const usePiecePositionsStore = create<PiecePositionsStore>(
             set(() => {
                 return {
                     piecePositions: getInitialPositions(),
+                };
+            }),
+        finishPositions: () =>
+            set(() => {
+                const newPiecePositions = { ...get().piecePositions };
+                let i = 0;
+                Object.values(newPiecePositions).forEach((piece) => {
+                    if (piece.color === 'black') {
+                        delete newPiecePositions[piece.id];
+                    } else {
+                        piece.tile.x = i;
+                        piece.tile.y = BOARD_SIZE - 2;
+                        i++;
+                    }
+                });
+                return {
+                    piecePositions: newPiecePositions,
                 };
             }),
     }),

@@ -27,7 +27,8 @@ function App() {
 
     return (
         <MantineProvider>
-            {gameState === GameState.GameStarted && <GameScreen />}
+            {(gameState === GameState.GameStarted ||
+                gameState === GameState.MatchFinished) && <GameScreen />}
             {(gameState === GameState.Menu || showMenu) && (
                 <Menu
                     onContinue={() => setShowMenu(false)}

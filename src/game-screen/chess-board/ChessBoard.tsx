@@ -7,6 +7,7 @@ import { GameStatsSection } from './StatsSection';
 import { useGameStatsStore } from '../../state/gameStatsStore';
 import { Tile } from './Pieces/types';
 import { getPieceValue, shouldLevelUp } from './Pieces/util';
+import { GameState, useGameStateStore } from '../../state/gameStateStore';
 
 export const BOARD_SIZE = 8;
 export const TILE_SIZE = 100;
@@ -38,10 +39,18 @@ export const ChessBoard = () => {
     const { draggingPiece, clearDraggingPiece } = useDraggingPieceStore();
     const { gameStats, decreaseLeftMovesPerRound, setGameStats } =
         useGameStatsStore();
+    const { gameState } = useGameStateStore();
 
     useEffect(() => {
         initializePositions();
     }, [initializePositions]);
+
+    useEffect(() => {
+        console.log(gameState);
+        if (gameState === GameState.MatchFinished) {
+            initializePositions();
+        }
+    }, [initializePositions, gameState]);
 
     const isDestinationTile = useCallback(
         (col: number, row: number) => {
@@ -114,9 +123,6 @@ export const ChessBoard = () => {
                 money: gameStats.money + getPieceValue(killedPiece),
             });
             deletePieceByTile(tile);
-            setGameStats({
-                money: gameStats.money + 100,
-            });
             if (shouldLevelUp(pieceToMove)) {
                 pieceToMove.level = pieceToMove.level + 1;
             }

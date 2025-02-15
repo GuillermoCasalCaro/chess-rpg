@@ -57,7 +57,8 @@ export const Menu = ({ onStartGame, onContinue }: MenuProps) => {
                             Start
                         </Button>
                     )}
-                    {gameState === GameState.GameStarted && (
+                    {(gameState === GameState.GameStarted ||
+                        gameState === GameState.MatchFinished) && (
                         <>
                             <Button
                                 size="lg"

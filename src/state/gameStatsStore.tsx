@@ -4,6 +4,7 @@ interface GameStats {
     numberOfRounds: number;
     money: number;
     leftMovesPerRound: number;
+    matchNumber: number;
 }
 
 type GameStatsStore = {
@@ -17,6 +18,7 @@ const initialGameStats: GameStats = {
     numberOfRounds: 0,
     money: 0,
     leftMovesPerRound: 3,
+    matchNumber: 1,
 };
 
 export const useGameStatsStore = create<GameStatsStore>()((set) => ({

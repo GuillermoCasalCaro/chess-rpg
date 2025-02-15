@@ -4,10 +4,14 @@ import { usePiecePositionsStore } from '../../state/piecePositionsStore';
 import { calculateBlackMoves } from './Pieces/black-moves';
 import { useDraggingPieceStore } from '../../state/draggingPieceStore';
 import { generatePieces } from './Pieces/black-generation';
+import { GameState, useGameStateStore } from '../../state/gameStateStore';
+import { set } from 'lodash';
 
 export const GameStatsSection = () => {
     const { gameStats, setGameStats } = useGameStatsStore();
-    const { piecePositions, setPiecePositions } = usePiecePositionsStore();
+    const { gameState, setGameState, finishMatch } = useGameStateStore();
+    const { piecePositions, setPiecePositions, finishPositions } =
+        usePiecePositionsStore();
     const { clearDraggingPiece } = useDraggingPieceStore();
 
     return (
@@ -23,6 +27,7 @@ export const GameStatsSection = () => {
                 justifyContent: 'space-around',
             }}
         >
+            <Text size="lg">Match: #{gameStats.matchNumber}</Text>
             <Text size="lg">Round: #{gameStats.numberOfRounds}</Text>
             <Text size="lg">Money: {gameStats.money} $</Text>
             <Text size="lg">
@@ -34,28 +39,77 @@ export const GameStatsSection = () => {
                 }
             </Text>
             <Text size="lg">Moves: {gameStats.leftMovesPerRound}</Text>
-            <Button
-                size="xs"
-                variant="gradient"
-                gradient={{ from: 'blue', to: 'cyan', deg: 90 }}
-                onClick={() => {
-                    setGameStats({
-                        leftMovesPerRound: 3,
-                        numberOfRounds: gameStats.numberOfRounds + 1,
-                    });
-                    clearDraggingPiece();
-                    const movedBlackPieces =
-                        calculateBlackMoves(piecePositions);
+            {gameState === GameState.MatchFinished && (
+                <Button
+                    size="xs"
+                    variant="gradient"
+                    gradient={{
+                        from: 'rgb(8, 159, 8)',
+                        to: 'rgb(0, 216, 0)',
+                        deg: 90,
+                    }}
+                    onClick={() => {
+                        setGameState(GameState.GameStarted);
+                        setGameStats({
+                            leftMovesPerRound: 3,
+                            numberOfRounds: 1,
+                        });
+                        clearDraggingPiece();
+                    }}
+                >
+                    {'START'}
+                </Button>
+            )}
+            {gameState === GameState.GameStarted && (
+                <>
+                    {gameStats.numberOfRounds < 20 ? (
+                        <Button
+                            size="xs"
+                            variant="gradient"
+                            gradient={{ from: 'blue', to: 'cyan', deg: 90 }}
+                            onClick={() => {
+                                setGameStats({
+                                    leftMovesPerRound: 3,
+                                    numberOfRounds:
+                                        gameStats.numberOfRounds + 1,
+                                });
+                                setGameState(GameState.GameStarted);
+                                clearDraggingPiece();
+                                const movedBlackPieces =
+                                    calculateBlackMoves(piecePositions);
 
-                    let generatedBlackPieces = movedBlackPieces;
-                    if (gameStats.numberOfRounds < 20) {
-                        generatedBlackPieces = generatePieces(movedBlackPieces);
-                    }
-                    setPiecePositions(generatedBlackPieces);
-                }}
-            >
-                {'NEXT'}
-            </Button>
+                                let generatedBlackPieces = movedBlackPieces;
+                                if (gameStats.numberOfRounds < 20) {
+                                    generatedBlackPieces =
+                                        generatePieces(movedBlackPieces);
+                                }
+                                setPiecePositions(generatedBlackPieces);
+                            }}
+                        >
+                            {'NEXT'}
+                        </Button>
+                    ) : (
+                        <Button
+                            size="xs"
+                            variant="gradient"
+                            gradient={{ from: 'orange', to: 'red', deg: 90 }}
+                            onClick={() => {
+                                setGameStats({
+                                    leftMovesPerRound: 3,
+                                    numberOfRounds: 1,
+                                    matchNumber: gameStats.matchNumber + 1,
+                                });
+                                clearDraggingPiece();
+                                finishPositions();
+                                finishMatch();
+                                setGameState(GameState.MatchFinished);
+                            }}
+                        >
+                            {'FINISH'}
+                        </Button>
+                    )}
+                </>
+            )}
         </Group>
     );
 };

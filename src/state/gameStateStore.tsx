@@ -3,6 +3,7 @@ import { create } from 'zustand';
 export enum GameState {
     Menu,
     GameStarted,
+    MatchFinished,
 }
 
 type GameStateStore = {
@@ -11,6 +12,7 @@ type GameStateStore = {
     showMenu: boolean;
     setShowMenu: (showMenu: boolean) => void;
     toggleMenu: () => void;
+    finishMatch: () => void;
 };
 
 export const useGameStateStore = create<GameStateStore>()((set) => ({
@@ -23,8 +25,9 @@ export const useGameStateStore = create<GameStateStore>()((set) => ({
         set({ showMenu });
     },
     toggleMenu: () => {
-        set((state) => ({
-            showMenu: !state.showMenu,
-        }));
+        set((state) => ({ showMenu: !state.showMenu }));
+    },
+    finishMatch: () => {
+        set(() => ({ gameState: GameState.MatchFinished }));
     },
 }));
