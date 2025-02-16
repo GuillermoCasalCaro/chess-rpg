@@ -1,14 +1,14 @@
 import { create } from 'zustand';
-import { Tile } from '../game-screen/chess-board/Pieces/types';
+import { Piece, Tile } from '../game-screen/chess-board/Pieces/types';
 
 type DraggingPieceStore = {
     draggingPiece: {
-        id: string;
+        piece: Piece;
         allowedTiles: Tile[];
         eatenTiles: Tile[];
     } | null;
     setDraggingPiece: (
-        id: string | null,
+        piece: Piece | null,
         allowedTiles: Tile[],
         eatenTiles: Tile[],
     ) => void;
@@ -17,8 +17,8 @@ type DraggingPieceStore = {
 
 export const useDraggingPieceStore = create<DraggingPieceStore>()((set) => ({
     draggingPiece: null,
-    setDraggingPiece: (id, allowedTiles, eatenTiles) => {
-        if (id === null) {
+    setDraggingPiece: (piece, allowedTiles, eatenTiles) => {
+        if (piece === null) {
             set({
                 draggingPiece: null,
             });
@@ -26,7 +26,7 @@ export const useDraggingPieceStore = create<DraggingPieceStore>()((set) => ({
         }
         set({
             draggingPiece: {
-                id: id,
+                piece: piece,
                 allowedTiles: allowedTiles,
                 eatenTiles: eatenTiles,
             },

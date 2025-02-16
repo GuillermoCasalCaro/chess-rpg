@@ -14,11 +14,8 @@ interface RookProps {
 }
 
 export const WhiteRook = ({ id, position, height, width }: RookProps) => {
-    const {
-        draggingPiece: draggingPieceId,
-        setDraggingPiece: setDraggingPieceId,
-        clearDraggingPiece,
-    } = useDraggingPieceStore();
+    const { draggingPiece, setDraggingPiece, clearDraggingPiece } =
+        useDraggingPieceStore();
     const { piecePositions } = usePiecePositionsStore();
     const pixelPosition = tileToPixel(position);
 
@@ -46,7 +43,7 @@ export const WhiteRook = ({ id, position, height, width }: RookProps) => {
             allowedTiles.push(tile);
         }
         allowedTiles = pruneOutboundTiles(allowedTiles);
-        setDraggingPieceId(id, allowedTiles, []);
+        setDraggingPiece(piecePositions[id], allowedTiles, []);
     };
 
     return (
@@ -59,7 +56,7 @@ export const WhiteRook = ({ id, position, height, width }: RookProps) => {
             anchor={0.5}
             eventMode="dynamic"
             onclick={() => {
-                if (draggingPieceId?.id === id) {
+                if (draggingPiece?.piece.id === id) {
                     clearDraggingPiece();
                 } else {
                     paintAllowedPositions();

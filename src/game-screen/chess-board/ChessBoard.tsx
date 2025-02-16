@@ -78,8 +78,8 @@ export const ChessBoard = () => {
         (col: number, row: number) => {
             const isDraggingPieceTile =
                 !!draggingPiece &&
-                piecePositions[draggingPiece.id].tile.x === col &&
-                piecePositions[draggingPiece.id].tile.y === row;
+                piecePositions[draggingPiece.piece.id].tile.x === col &&
+                piecePositions[draggingPiece.piece.id].tile.y === row;
             if (isDraggingPieceTile) {
                 return TileKind.SELECTED;
             }
@@ -167,7 +167,7 @@ export const ChessBoard = () => {
                                     onclick={() => {
                                         if (tileKind === TileKind.MOVABLE) {
                                             movePieceTo(
-                                                draggingPiece!.id,
+                                                draggingPiece!.piece.id,
                                                 {
                                                     x: col,
                                                     y: row,
@@ -178,7 +178,7 @@ export const ChessBoard = () => {
                                         }
                                         if (tileKind === TileKind.EDIBLE) {
                                             movePieceTo(
-                                                draggingPiece!.id,
+                                                draggingPiece!.piece.id,
                                                 {
                                                     x: col,
                                                     y: row,

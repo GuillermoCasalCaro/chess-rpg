@@ -96,7 +96,7 @@ export const WhitePawn = ({ position, id, height, width }: PawnProps) => {
                 anchor={0.5}
                 eventMode="dynamic"
                 onclick={() => {
-                    if (draggingPiece?.id === id) {
+                    if (draggingPiece?.piece.id === id) {
                         clearDraggingPiece();
                     } else {
                         const moveTiles = getMoveTiles();
@@ -104,7 +104,7 @@ export const WhitePawn = ({ position, id, height, width }: PawnProps) => {
                             moveTiles.allowedTiles,
                         );
                         setDraggingPiece(
-                            id,
+                            pieceInfo,
                             moveTiles.allowedTiles,
                             moveTiles.eatenTiles,
                         );
