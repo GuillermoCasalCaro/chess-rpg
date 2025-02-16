@@ -13,6 +13,7 @@ export type PiecePositionsStore = {
     setPiecePosition: (id: string, x: number, y: number) => void;
     setPieceData: (id: string, piece: Partial<Piece>) => void;
     setPiecePositions: (piecePositions: PiecePositions) => void;
+    setPiecePositionsArray: (piecePositions: Piece[]) => void;
     deletePiece: (id: string) => void;
     getPieceByTile: (tile: Tile) => Piece | undefined;
     deletePieceByTile: (tile: Tile) => void;
@@ -57,7 +58,16 @@ export const usePiecePositionsStore = create<PiecePositionsStore>(
             set(() => ({
                 piecePositions,
             })),
-
+        setPiecePositionsArray: (pieceArray) =>
+            set(() => ({
+                piecePositions: pieceArray.reduce(
+                    (acc, piece) => ({
+                        ...acc,
+                        [piece.id]: piece,
+                    }),
+                    {},
+                ),
+            })),
         deletePiece: (id: string) => {
             set((state) => {
                 const newPiecePositions = { ...state.piecePositions };
