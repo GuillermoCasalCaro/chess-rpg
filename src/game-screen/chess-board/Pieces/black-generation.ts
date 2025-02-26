@@ -1,21 +1,33 @@
-import _ from "lodash";
-import { BOARD_SIZE } from "../ChessBoard";
-import { Piece, PiecePositions } from "./types";
+import _ from 'lodash';
+import { Piece, PiecePositions } from './types';
 import { v4 as uuidv4 } from 'uuid';
+import { wavesConfig } from '../waves-config';
 
-export const generatePieces = (piecePositions: PiecePositions) => {
+export const generatePieces = (
+    piecePositions: PiecePositions,
+    waveNumber: number,
+) => {
     const newPieces = _.cloneDeep(piecePositions);
-    const topTiles = Array.from({ length: BOARD_SIZE }).map((_, i) => i) as number[];
-    const topTilesOccupied = Object.values(newPieces).filter((p) => p.tile.y === 0).map((p) => p.tile.x);
-    const emptyTopTiles = topTiles.filter((t) => !topTilesOccupied.includes(t));
+    const occupiedTiles = Object.values(newPieces).map((p) => p.tile);
 
-    if (emptyTopTiles.length > 0) {
-        const randomEmptyTile = emptyTopTiles[Math.floor(Math.random() * emptyTopTiles.length)];
+    const allowedSpawns = wavesConfig[waveNumber].config.flatMap(
+        ({ mark, restrictions }) =>
+            restrictions.allowedSpawnTiles.map((tile) => ({ mark, tile })),
+    );
+
+    const spawnTiles = allowedSpawns.filter(
+        (spawn) => !_.some(occupiedTiles, spawn.tile),
+    );
+
+    if (spawnTiles.length > 0) {
+        const randomSpawn =
+            spawnTiles[Math.floor(Math.random() * spawnTiles.length)];
+
         const piece = {
             id: uuidv4(),
             color: 'black',
-            type: 'pawn',
-            tile: {x: randomEmptyTile, y: 0},
+            type: randomSpawn.mark,
+            tile: randomSpawn.tile,
             kills: 0,
             allowedTiles: [],
             eatenTiles: [],
@@ -26,4 +38,4 @@ export const generatePieces = (piecePositions: PiecePositions) => {
     }
 
     return newPieces;
-}   
+};
